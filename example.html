@@ -1,0 +1,53 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01//EN"
+    "http://www.w3.org/TR/html4/strict.dtd">
+<html ng-app="layoutDemo">
+    <head>
+        <meta http-equiv="Content-type" content="text/html; charset=utf-8">
+        <title>Angular Components</title>
+        <script src="http://code.jquery.com/jquery-1.6.2.min.js" type="text/javascript" charset="utf-8"></script>
+        <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.0.6/angular.min.js" type="text/javascript" charset="utf-8"></script>
+        <script src="http://static.opentok.com/webrtc/v2.0/js/TB.min.js" type="text/javascript" charset="utf-8"></script>
+        <script src="http://aullman.github.io/LayoutContainer/animate.js" type="text/javascript" charset="utf-8"></script>
+        <script src="http://aullman.github.io/LayoutContainer/layoutContainer.js" type="text/javascript" charset="utf-8"></script>
+        <script src="scripts/TB_Angular.js" type="text/javascript" charset="utf-8"></script>
+        
+        <style type="text/css" media="screen">
+            layout {
+                width: 100%;
+                height: 100%;
+            }
+            
+            publisher {
+                width: 100px;
+                height: 100px;
+                display: block;
+                position: absolute !important;
+                bottom: 0px;
+                right: 0px;
+            }
+        </style>
+        
+        <script type="text/javascript" charset="utf-8">
+            var apiKey = 1127;  // replace with your apiKey
+            var sessionId = "1_MX4xMTI3fn5UdWUgTWF5IDE0IDE3OjM0OjMyIFBEVCAyMDEzfjAuNTI4ODU1NH4";    // replace with your sessionId
+            var token = "T1==cGFydG5lcl9pZD0xMTI3JnNka192ZXJzaW9uPXRicHktdjAuOTEuMjAxMS0wNy0wNSZzaWc9OWZlYmIxMGQ2ZTJmODkzNzE4YTIxZDk5ZWYzZGFiNWYzZWVjZjdjNTpleHBpcmVfdGltZT0xMzcxMjA2MDczJm5vbmNlPTc0MTA5MyZjcmVhdGVfdGltZT0xMzY4NTc4MDczJnJvbGU9bW9kZXJhdG9yJnNlc3Npb25faWQ9MV9NWDR4TVRJM2ZuNVVkV1VnVFdGNUlERTBJREUzT2pNME9qTXlJRkJFVkNBeU1ERXpmakF1TlRJNE9EVTFOSDQ=";     // replace with your generated token
+        
+            angular.module('layoutDemo', [])
+                .directive('layout', TB.angular.LayoutDirective)
+                .directive('publisher', TB.angular.PublisherDirective)
+                .directive('subscriber', TB.angular.SubscriberDirective);
+        
+            var OpentokCtrl = TB.angular.createOpentokCtrl(apiKey, sessionId, token);
+        </script>
+    </head>
+    <body ng-controller="OpentokCtrl">
+        <layout>
+            <subscriber ng-repeat="stream in streams | filter:notMine" stream="stream" session="session" props="{subscribeToAudio:false}">
+                
+            </subscriber>
+        </layout>
+        
+        <publisher apiKey="1127" publisher="publisher" props="{name: 'Adam'}"></publisher>
+        
+    </body>
+</html>
