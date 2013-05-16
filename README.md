@@ -39,7 +39,10 @@ function PublisherCtrl($scope) {
 
 ```html
 <div ng-controller="PublisherCtrl">
-    <publisher apiKey="1127" publisher="publisher" props="{name: 'Adam'}"></publisher>
+    <publisher apiKey="1127" 
+        publisher="publisher" 
+        props="{name: 'Adam'}">
+    </publisher>
 </div>
 ```
 
@@ -48,7 +51,7 @@ function PublisherCtrl($scope) {
 
 The subscriber directive uses the power of Angular directives to allow you to define an OpenTok subscriber directly in your DOM. You will likely want to iterate over some kind of collection of streams and create subscriber objects for those streams. You can either maintain that list of streams yourself or you can use the default TB.angular.createOpentokCtrl to maintain all of the streams in the session on your scope.
 
-### Requirements
+### Dependencies
 
 This directive requires the OpenTok JavaScript WebRTC library to be included in your page. For more details see [the opentok documentation](http://www.tokbox.com/opentok/webrtc/docs/js/reference/index.html).
 
@@ -71,14 +74,22 @@ var SubscriberCtrl = TB.angular.createOpentokCtrl(apiKey, sessionId, token);
 
 ```html
 <div ng-controller="SubscriberDemo">
-    <subscriber ng-repeat="stream in streams | filter:notMine" stream="stream" session="session" props="{subscribeToAudio:false}"></subscriber>
+    <subscriber ng-repeat="stream in streams | filter:notMine" 
+        stream="stream" 
+        session="session" 
+        props="{subscribeToAudio:false}">
+    </subscriber>
 </div>
 ```
 ## TB.angular.LayoutDirective
 
-The layout directive uses an existing [LayoutContainer jQuery plugin](https://github.com/aullman/aullman.github.com/tree/master/LayoutContainer) that I wrote but makes it accessible as an Angular directive. What it does is intelligently size a bunch of video elements to fit within a specified space. You can see a [demo here](http://aullman.github.io/LayoutContainer/mediaLayout.html).
+This directive handles some nice layout logic for you to layout your publishers and subscribers. What it does is intelligently size a bunch of video elements to fit within a specified space. You can see a [demo here](http://aullman.github.io/LayoutContainer/mediaLayout.html).
 
-You can put Subscribers and your Publisher in it to make them all have equal weight.
+You can put Publishers and/or Subscribers into it and it will basically size the widgets to fit within the container and minimise whitespace.
+
+### Dependencies
+
+The layout directive uses an existing [LayoutContainer jQuery plugin](https://github.com/aullman/aullman.github.com/tree/master/LayoutContainer) that I wrote but makes it accessible as an Angular directive. 
 
 ### Example Usage
 
@@ -97,6 +108,22 @@ angular.module('layoutDemo', [])
 
 ```html
 <layout>
-    <subscriber ng-repeat="stream in streams | filter:notMine" stream="stream" session="session" props="{subscribeToAudio:false}"></subscriber>
+    <subscriber ng-repeat="stream in streams | filter:notMine" 
+        stream="stream" 
+        session="session" 
+        props="{subscribeToAudio:false}">
+    </subscriber>
 </layout>
 ```
+
+## TB.angular.createOpentokCtrl
+
+This method just creates an Angular controller object for you which keeps track of the streams in a session and puts them on the scope object. It also exposes a handy notMine filter to filter out your own stream.
+
+### Dependencies
+
+The OpenTok controller requires TB.js be included in your  
+
+### Example Usage
+
+See the [Subscriber Directive example usage](#example-usage-1).
