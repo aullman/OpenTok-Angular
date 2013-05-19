@@ -126,4 +126,15 @@ The OpenTok controller requires TB.js be included in your
 
 ### Example Usage
 
-See the [Subscriber Directive example usage](#example-usage-1).
+If your Controller has no additional behaviour you can use this method to create your simple OpenTok controller. See the [Subscriber Directive example usage](#example-usage-1).
+
+If however you want to add additional functionality you can extend an existing Controller with the OpenTok controller behaviour. eg.
+
+```javascript
+function MyController($scope) {
+    var OpenTokCtrl = TB.angular.createOpentokCtrl(apiKey, sessionId, token);
+    OpenTokCtrl($scope);
+}
+```
+
+This will add the streams, session and publisher properties to your scope. It will also add the notMine filter method and connect you to the session you specify.

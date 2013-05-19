@@ -1,3 +1,10 @@
+/**
+ * OpenTok for AngularJS
+ *
+ * by: Adam Ullman
+ * url: http://aullman.github.com/OpenTok-Angular
+ */
+
 if (!TB) throw new Error("You must include the TB library before the TB_Angular library");
 
 if (!TB.angular) TB.angular = {};
@@ -52,7 +59,7 @@ TB.angular.createOpentokCtrl = function(apiKey, sessionId, token) {
 
         $scope.session.connect(apiKey, token);
     };
-}
+};
 
 
 TB.angular.LayoutDirective = function($window) {
@@ -108,5 +115,4 @@ TB.angular.SubscriberDirective = function() {
             var subscriber = session.subscribe(stream, stream.streamId, props);
         }
     };
-}
-    
+};
