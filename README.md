@@ -31,8 +31,8 @@ angular.module('layoutDemo', [])
 
 function PublisherCtrl($scope) {
     $scope.publisher;
-    session.on("sessionConnected", function(event) {
-        session.publish($scope.publisher);
+    $scope.session.on("sessionConnected", function(event) {
+        $scope.session.publish($scope.publisher);
     });
 }
 ```
