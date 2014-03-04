@@ -1,0 +1,32 @@
+{
+  "name": "opentok-angular",
+  "version": "0.0.1",
+  "description": "Angular module for OpenTok",
+  "main": "opentok-angular.js",
+  "dependencies": {
+    "gulp": "~3.5.5"
+  },
+  "devDependencies": {
+    "gulp": "~3.5.5",
+    "gulp-uglify": "~0.2.1",
+    "gulp-jshint": "~1.5.0",
+    "gulp-rename": "~1.1.0"
+  },
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/aullman/OpenTok-Angular.git"
+  },
+  "keywords": [
+    "opentok",
+    "angular"
+  ],
+  "author": "Adam Ullman",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/aullman/OpenTok-Angular/issues"
+  },
+  "homepage": "https://github.com/aullman/OpenTok-Angular"
+}
