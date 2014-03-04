@@ -1,0 +1,25 @@
+{
+  "name": "opentok-angular",
+  "main": "opentok-angular.js",
+  "version": "0.0.1",
+  "homepage": "https://github.com/aullman/OpenTok-Angular",
+  "authors": [
+    "Adam Ullman <adam@tokbox.com>"
+  ],
+  "description": "Angular module for OpenTok",
+  "keywords": [
+    "angular",
+    "opentok"
+  ],
+  "license": "MIT",
+  "ignore": [
+    "**/.*",
+    "node_modules",
+    "bower_components",
+    "test",
+    "tests"
+  ],
+  "dependencies": {
+    "opentok-layout-js": "~0.0.6"
+  }
+}

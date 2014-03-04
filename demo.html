@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html ng-app="demo">
+    <head>
+        <meta http-equiv="Content-type" content="text/html; charset=utf-8">
+        <title>OpenTok-Angular Demo</title>
+         <script src="https://swww.tokbox.com/webrtc/v2.2/js/TB.js" type="text/javascript" charset="utf-8"></script>
+         <script src="//code.jquery.com/jquery-1.9.1.min.js" type="text/javascript" charset="utf-8"></script>
+         <script src="//ajax.googleapis.com/ajax/libs/angularjs/1.2.2/angular.min.js" type="text/javascript" charset="utf-8"></script>
+         <script src="bower_components/opentok-layout-js/opentok-layout.js" type="text/javascript" charset="utf-8"></script>
+         <script src="opentok-angular.js" type="text/javascript" charset="utf-8"></script>
+ 
+         <script type="text/javascript" charset="utf-8">
+             angular.module('demo', ['opentok']);
+         </script>
+         <style type="text/css" media="screen">
+             ot-publisher,ot-subscriber,ot-layout,ot-session {
+                 display: block;
+             }
+             ot-layout {
+                 position: absolute;
+                 top: 0;
+                 left: 0;
+                 right: 0;
+                 bottom: 0;
+             }
+         </style>
+    </head>
+    <body>
+        <ot-session apiKey="REPLACE_WITH_YOUR_APIKEY" 
+            sessionId="REPLACE_WITH_YOUR_SESSIONID" 
+            token="REPLACE_WITH_YOUR_TOKEN" 
+            publisher="publisher" 
+            streams="streams" 
+            session="session">
+            <ot-layout props="{animate:true}">
+                <ot-subscriber ng-repeat="stream in streams" 
+                    stream="stream" 
+                    session="session" 
+                    props="{style: {nameDisplayMode: 'off'}}">
+                </ot-subscriber>
+                <ot-publisher id="publisher" 
+                    apiKey="<%=apiKey%>" 
+                    publisher="publisher"
+                    props="{style: {nameDisplayMode: 'off'}, resolution: '1280x720', frameRate: 30}">
+                </ot-publisher>
+            </ot-layout>
+        </ot-session>
+    </body>
+</html>
