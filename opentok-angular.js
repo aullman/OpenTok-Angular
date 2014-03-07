@@ -14,7 +14,7 @@ angular.module('opentok', [])
 .factory("TB", function () {
     return TB;
 })
-.directive('otSession', function(TB) {
+.directive('otSession', ['TB', function(TB) {
     return {
         restrict: 'E',
         scope: {
@@ -57,7 +57,9 @@ angular.module('opentok', [])
             scope.session.on({
                 sessionConnected: function(event) {
                     addStreams(event.streams);
-                    if (scope.publisher) scope.session.publish(scope.publisher);
+                    var publisherEl = angular.element("ot-publisher"),
+                        publisher = scope.publisher || (publisherEl && publisherEl.scope() && publisherEl.scope().publisher);
+                    if (publisher) scope.session.publish(publisher);
                     $(element).addClass("session-connected");
                     $(element).removeClass("session-disconnected");
                 },
@@ -83,8 +85,8 @@ angular.module('opentok', [])
             scope.session.connect(apiKey, token);
         }
     };
-})
-.directive('otLayout', function($window, $parse, TB) {
+}])
+.directive('otLayout', ['$window', '$parse', 'TB', function($window, $parse, TB) {
     return {
         restrict: 'E',
         link: function(scope, element, attrs) {
@@ -99,8 +101,8 @@ angular.module('opentok', [])
             });
         }
     };
-})
-.directive('otPublisher', function($document, $window) {
+}])
+.directive('otPublisher', ['$document', '$window', function($document, $window) {
     return {
         restrict: 'E',
         scope: {
@@ -131,7 +133,7 @@ angular.module('opentok', [])
             if (scope.session) scope.session.publish(scope.publisher);
         }
     };
-})
+}])
 .directive('otSubscriber', function() {
     return {
         restrict: 'E',
