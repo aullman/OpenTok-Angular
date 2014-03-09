@@ -62,6 +62,7 @@ angular.module('opentok', [])
                     if (publisher) scope.session.publish(publisher);
                     $(element).addClass("session-connected");
                     $(element).removeClass("session-disconnected");
+                    scope.$emit('sessionConnected', event);
                 },
                 streamCreated: function(event) {
                     addStreams(event.streams);
@@ -75,6 +76,7 @@ angular.module('opentok', [])
                     });
                     $(element).addClass("session-disconnected");
                     $(element).removeClass("session-connected");
+                    scope.$emit('sessionDisconnected', event);
                 }
             });
 

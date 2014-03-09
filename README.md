@@ -28,6 +28,10 @@ ot-session.session-connected ~ #connectingUI {
 }
 ```
 
+### Events
+
+This directive will $emit a 'sessionConnected' and 'sessionDisconnected' event corresponding to the OpenTok Session events. This event is $emit'd on the scope so parents of this directive can listen for them.
+
 ### Example Usage
 
 ```javascript
