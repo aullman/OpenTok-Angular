@@ -5,7 +5,7 @@ Angular directives and helper code to make working with OpenTok more Angularish.
 
 It only works with the [OpenTok API for WebRTC](http://www.tokbox.com/opentok/webrtc/docs).
 
-To see a demo of it all working check out [opentok-hangout](https://opentok-hangout.herokuapp.com/) ([github](https://github.com/aullman/opentok-hangout)).
+To see a demo of it all working check out [opentok-meet](https://meet.tokbox.com/) ([github](https://github.com/aullman/opentok-meet)).
 
 ## ot-session Directive
 
@@ -145,4 +145,4 @@ angular.module('myModule', ['opentok']);
 
 ## Putting it all together
 
-These directives are meant to all be used together, an example of them all being used can be found [here](demo.html). You will need to put in your own sessionId and token to get it to work. A more fully-functional demo can be found at: [opentok-hangout](https://opentok-hangout.herokuapp.com/).
+These directives are meant to all be used together, an example of them all being used can be found [here](demo.html). You will need to put in your own sessionId and token to get it to work. A more fully-functional demo can be found at: [opentok-meet](https://meet.tokbox.com/).
