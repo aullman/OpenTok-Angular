@@ -1,7 +1,7 @@
 {
   "name": "opentok-angular",
   "main": "opentok-angular.js",
-  "version": "0.0.3",
+  "version": "0.1.0",
   "homepage": "https://github.com/aullman/OpenTok-Angular",
   "authors": [
     "Adam Ullman <adam@tokbox.com>"
@@ -22,6 +22,8 @@
     "tests"
   ],
   "dependencies": {
-    "opentok-layout-js": "~0.0.6"
+    "opentok-layout-js": "~0.0.6",
+    "angular": "~1.2.15",
+    "jquery": "~2.1.0"
   }
 }

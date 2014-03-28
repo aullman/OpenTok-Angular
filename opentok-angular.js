@@ -10,83 +10,43 @@
 
 if (!window.TB) throw new Error("You must include the TB library before the TB_Angular library");
 
-angular.module('opentok', [])
+var OpenTokAngular = angular.module('opentok', [])
 .factory("TB", function () {
     return TB;
 })
-.directive('otSession', ['TB', function(TB) {
-    return {
-        restrict: 'E',
-        scope: {
-            apiKey: '@',
-            sessionId: '@',
-            token: '@',
-            session: '=',
-            streams: '=',
-            publisher: '='
-        },
-        link: function(scope, element, attrs) {
-            var apiKey = attrs.apikey,
-                sessionId = attrs.sessionid,
-                token = attrs.token;
-            scope.streams = [];
-            
-            $(element).addClass("session-disconnected");
-
-            scope.session = TB.initSession(sessionId);
-
-            var addStreams = function addStreams(streams) {
-                scope.$apply(function() {
-                    scope.streams = scope.streams.concat(streams);
-                });
-            };
-
-            var removeStreams = function removeStreams(streams) {
-                for (var i = 0; i < streams.length; i++) {
-                    for (var j = 0; j < scope.streams.length; j++) {
-                        if (streams[i].streamId == scope.streams[j].streamId) {
-                            scope.$apply(function() {
-                                scope.streams.splice(j, 1);
-                            });
-                            break;
-                        }
-                    }
-                }
-            };
-
-            scope.session.on({
-                sessionConnected: function(event) {
-                    addStreams(event.streams);
-                    var publisherEl = angular.element("ot-publisher"),
-                        publisher = scope.publisher || (publisherEl && publisherEl.scope() && publisherEl.scope().publisher);
-                    if (publisher) scope.session.publish(publisher);
-                    $(element).addClass("session-connected");
-                    $(element).removeClass("session-disconnected");
-                    scope.$emit('sessionConnected', event);
-                },
-                streamCreated: function(event) {
-                    addStreams(event.streams);
-                },
-                streamDestroyed: function(event) {
-                    removeStreams(event.streams);
-                },
-                sessionDisconnected: function(event) {
-                    scope.$apply(function() {
-                        scope.streams = [];
-                    });
-                    $(element).addClass("session-disconnected");
-                    $(element).removeClass("session-connected");
-                    scope.$emit('sessionDisconnected', event);
-                }
-            });
-
-            scope.notMine = function(stream) {
-                return stream.connection.connectionId != scope.session.connection.connectionId;
-            };
-
-            scope.session.connect(apiKey, token);
-        }
+.factory("OTSession", ['TB', '$rootScope', 'apiKey', 'sessionId', 'token', function (TB, $rootScope, apiKey, sessionId, token) {
+    var OTSession = {
+        streams: [],
+        session: TB.initSession(sessionId),
+        publishers: []
     };
+
+    OTSession.session.on({
+        sessionConnected: function(event) {
+            OTSession.publishers.forEach(function (publisher) {
+                OTSession.session.publish(publisher);
+            });
+        },
+        streamCreated: function(event) {
+            $rootScope.$apply(function() {
+                OTSession.streams.push(event.stream);
+            });
+        },
+        streamDestroyed: function(event) {
+            $rootScope.$apply(function() {
+                OTSession.streams.splice(OTSession.streams.indexOf(event.stream), 1);
+            });
+        },
+        sessionDisconnected: function(event) {
+            $rootScope.$apply(function() {
+                OTSession.streams.splice(0, OTSession.streams.length-1);
+            });
+        }
+    });
+
+    OTSession.session.connect(apiKey, token);
+    
+    return OTSession;
 }])
 .directive('otLayout', ['$window', '$parse', 'TB', function($window, $parse, TB) {
     return {
@@ -104,20 +64,18 @@ angular.module('opentok', [])
         }
     };
 }])
-.directive('otPublisher', ['$document', '$window', function($document, $window) {
+.directive('otPublisher', ['$document', '$window', 'OTSession', function($document, $window, OTSession) {
     return {
         restrict: 'E',
         scope: {
-            props: '&',
-            publisher: '=',
-            session: '='
+            props: '&'
         },
         link: function(scope, element, attrs){
             var props = scope.props() || {};
             props.width = props.width ? props.width : $(element).width();
             props.height = props.height ? props.height : $(element).height();
             var oldChildren = $(element).children();
-            scope.publisher = TB.initPublisher(attrs.apikey, element[0], props);
+            scope.publisher = TB.initPublisher(attrs.apikey || OTSession.session.apiKey, element[0], props);
             // Make transcluding work manually by putting the children back in there
             $(element).append(oldChildren);
             scope.publisher.on({
@@ -132,26 +90,27 @@ angular.module('opentok', [])
                 if (scope.session) scope.session.unpublish(scope.publisher);
                 else scope.publisher.destroy();
             });
-            if (scope.session) scope.session.publish(scope.publisher);
+            if (OTSession.session && OTSession.session.connected) {
+                OTSession.session.publish(scope.publisher);
+            }
+            OTSession.publishers.push(scope.publisher);
         }
     };
 }])
-.directive('otSubscriber', function() {
+.directive('otSubscriber', ['OTSession', function(OTSession) {
     return {
         restrict: 'E',
         scope: {
             stream: '=',
-            session: "=",
             props: '&'
         },
         link: function(scope, element, attrs){
             var stream = scope.stream,
-                session = scope.session,
                 props = scope.props() || {};
             props.width = props.width ? props.width : $(element).width();
             props.height = props.height ? props.height : $(element).height();
             var oldChildren = $(element).children();
-            var subscriber = session.subscribe(stream, element[0], props);
+            var subscriber = OTSession.session.subscribe(stream, element[0], props);
             subscriber.on("loaded", function () {
                 scope.$emit("otLayout");
             });
@@ -162,4 +121,4 @@ angular.module('opentok', [])
             });
         }
     };
-});
+}]);
