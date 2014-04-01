@@ -75,7 +75,12 @@ var OpenTokAngular = angular.module('opentok', [])
             props.width = props.width ? props.width : $(element).width();
             props.height = props.height ? props.height : $(element).height();
             var oldChildren = $(element).children();
-            scope.publisher = TB.initPublisher(attrs.apikey || OTSession.session.apiKey, element[0], props);
+            scope.publisher = TB.initPublisher(attrs.apikey || OTSession.session.apiKey,
+                element[0], props, function (err) {
+                if (err) {
+                    scope.$emit("otPublisherError", err, scope.publisher);
+                }
+            });
             // Make transcluding work manually by putting the children back in there
             $(element).append(oldChildren);
             scope.publisher.on({
@@ -91,7 +96,11 @@ var OpenTokAngular = angular.module('opentok', [])
                 else scope.publisher.destroy();
             });
             if (OTSession.session && OTSession.session.connected) {
-                OTSession.session.publish(scope.publisher);
+                OTSession.session.publish(scope.publisher, function (err) {
+                    if (err) {
+                        scope.$emit("otPublisherError", err, scope.publisher);
+                    }
+                });
             }
             OTSession.publishers.push(scope.publisher);
         }
@@ -110,7 +119,11 @@ var OpenTokAngular = angular.module('opentok', [])
             props.width = props.width ? props.width : $(element).width();
             props.height = props.height ? props.height : $(element).height();
             var oldChildren = $(element).children();
-            var subscriber = OTSession.session.subscribe(stream, element[0], props);
+            var subscriber = OTSession.session.subscribe(stream, element[0], props, function (err) {
+                if (err) {
+                    scope.$emit("otSubscriberError", err, subscriber);
+                }
+            });
             subscriber.on("loaded", function () {
                 scope.$emit("otLayout");
             });
