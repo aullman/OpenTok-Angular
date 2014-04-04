@@ -127,13 +127,13 @@ angular.module('myModule', ['opentok']);
 ```
 
 ```html
-<tb-layout props="{animate:true}">
+<ot-layout props="{animate:true}">
     <ot-subscriber ng-repeat="stream in streams" 
         stream="stream" 
         session="session" 
         props="{style: {nameDisplayMode: 'off'}}">
     </ot-subscriber>
-</tb-layout>
+</ot-layout>
 ```
 
 ### Putting it all together
