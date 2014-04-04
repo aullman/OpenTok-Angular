@@ -14,7 +14,7 @@ var OpenTokAngular = angular.module('opentok', [])
 .factory("TB", function () {
     return TB;
 })
-.factory("OTSession", ['TB', '$rootScope', function (TB, $rootScope, apiKey, sessionId, token) {
+.factory("OTSession", ['TB', '$rootScope', function (TB, $rootScope) {
     var OTSession = {
         streams: [],
         publishers: [],
