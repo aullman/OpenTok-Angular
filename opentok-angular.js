@@ -59,7 +59,7 @@ var OpenTokAngular = angular.module('opentok', [])
                 }
             });
             
-            if (cb) cb();
+            if (cb) cb(null, OTSession.session);
             OTSession.session.connect(apiKey, token);
           });
         }
