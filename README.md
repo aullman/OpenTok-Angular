@@ -63,6 +63,10 @@ This directive requires the OpenTok JavaScript WebRTC library to be included in 
 
 * props - The properties you want to pass to the [session.publish](http://www.tokbox.com/opentok/webrtc/docs/js/reference/Session.html#publish) method.
 
+#### Events
+
+* `"otPublisherError"` - This event is emitted on the scope if there is an error creating or publishing this publisher.
+
 #### Example Usage
 
 Include the OpenTok TB.min.js file and the opentok-angular.js file in your HTML.
@@ -88,6 +92,10 @@ This directive requires the OpenTok JavaScript WebRTC library to be included in 
 
 * stream - The OpenTok stream you want to subscribe to
 * props - The properties you want to pass to the [session.subscribe](http://www.tokbox.com/opentok/webrtc/docs/js/reference/Session.html#subscribe) method.
+
+#### Events
+
+* `"otSubscriberError"` - This event is emitted on the scope if there is an error subscribing.
 
 #### Example Usage
 
