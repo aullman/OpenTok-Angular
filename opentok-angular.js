@@ -16,7 +16,7 @@ var OpenTokAngular = angular.module('opentok', [])
 })
 .factory("OTReady", ['$document', function ($document) {
   var ready = false;
-  $document.$on('deviceReady', function () {
+  $document.context.addEventListener('deviceReady', function () {
     ready = true;
   });
   
@@ -24,7 +24,7 @@ var OpenTokAngular = angular.module('opentok', [])
     if (ready) {
       fn.call(this);
     } else {
-      $document.$on('deviceReady', fn);
+      $document.context.addEventListener('deviceReady', fn);
     }
   });
 }])
