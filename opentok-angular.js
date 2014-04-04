@@ -14,43 +14,57 @@ var OpenTokAngular = angular.module('opentok', [])
 .factory("TB", function () {
     return TB;
 })
-.factory("OTSession", ['TB', '$rootScope', 'apiKey', 'sessionId', 'token', function (TB, $rootScope, apiKey, sessionId, token) {
+.factory("OTReady", ['$document', function ($document) {
+  var ready = false;
+  $document.$on('deviceReady', function () {
+    ready = true;
+  });
+  
+  return (function(fn){
+    if (ready) {
+      fn.call(this);
+    } else {
+      $document.$on('deviceReady', fn);
+    }
+  });
+}])
+.factory("OTSession", ['TB', '$rootScope', 'OTReady', function (TB, $rootScope, OTReady) {
     var OTSession = {
         streams: [],
-        publishers: []
-    };
-    document.addEventListener('deviceReady', function () {
-        OTSession.session = TB.initSession(sessionId);
-        OTSession.session.on({
-            sessionConnected: function(event) {
-                $rootScope.$apply(function() {
-                    OTSession.streams.push.apply(OTSession.streams, event.streams);
-                });
-                OTSession.publishers.forEach(function (publisher) {
-                    OTSession.session.publish(publisher);
-                });
-            },
-            streamCreated: function(event) {
-                $rootScope.$apply(function() {
-                    OTSession.streams.push(event.stream);
-                });
-            },
-            streamDestroyed: function(event) {
-                if (event) {
+        publishers: [],
+        init: function (apiKey, sessionId, token, cb) {
+          OTReady(function () {
+            this.session = TB.initSession(sessionId);
+            
+            OTSession.session.on({
+                sessionConnected: function(event) {
+                    OTSession.publishers.forEach(function (publisher) {
+                        OTSession.session.publish(publisher);
+                    });
+                },
+                streamCreated: function(event) {
+                    $rootScope.$apply(function() {
+                        OTSession.streams.push(event.stream);
+                    });
+                },
+                streamDestroyed: function(event) {
                     $rootScope.$apply(function() {
                         OTSession.streams.splice(OTSession.streams.indexOf(event.stream), 1);
                     });
+                },
+                sessionDisconnected: function(event) {
+                    $rootScope.$apply(function() {
+                        OTSession.streams.splice(0, OTSession.streams.length-1);
+                    });
                 }
-            },
-            sessionDisconnected: function(event) {
-                $rootScope.$apply(function() {
-                    OTSession.streams.splice(0, OTSession.streams.length-1);
-                });
-            }
-        });
-
-        OTSession.session.connect(apiKey, token);
-    });
+            });
+            
+            this.session.connect(apiKey, token, function (err) {
+                if (cb) cb(err, OTSession.session);
+            });
+          });
+        }
+    };
     return OTSession;
 }])
 .directive('otLayout', ['$window', '$parse', 'TB', function($window, $parse, TB) {
