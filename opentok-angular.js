@@ -17,35 +17,40 @@ var OpenTokAngular = angular.module('opentok', [])
 .factory("OTSession", ['TB', '$rootScope', 'apiKey', 'sessionId', 'token', function (TB, $rootScope, apiKey, sessionId, token) {
     var OTSession = {
         streams: [],
-        session: TB.initSession(sessionId),
         publishers: []
     };
+    document.addEventListener('deviceReady', function () {
+        OTSession.session = TB.initSession(sessionId);
+        OTSession.session.on({
+            sessionConnected: function(event) {
+                $rootScope.$apply(function() {
+                    OTSession.streams.push.apply(OTSession.streams, event.streams);
+                });
+                OTSession.publishers.forEach(function (publisher) {
+                    OTSession.session.publish(publisher);
+                });
+            },
+            streamCreated: function(event) {
+                $rootScope.$apply(function() {
+                    OTSession.streams.push(event.stream);
+                });
+            },
+            streamDestroyed: function(event) {
+                if (event) {
+                    $rootScope.$apply(function() {
+                        OTSession.streams.splice(OTSession.streams.indexOf(event.stream), 1);
+                    });
+                }
+            },
+            sessionDisconnected: function(event) {
+                $rootScope.$apply(function() {
+                    OTSession.streams.splice(0, OTSession.streams.length-1);
+                });
+            }
+        });
 
-    OTSession.session.on({
-        sessionConnected: function(event) {
-            OTSession.publishers.forEach(function (publisher) {
-                OTSession.session.publish(publisher);
-            });
-        },
-        streamCreated: function(event) {
-            $rootScope.$apply(function() {
-                OTSession.streams.push(event.stream);
-            });
-        },
-        streamDestroyed: function(event) {
-            $rootScope.$apply(function() {
-                OTSession.streams.splice(OTSession.streams.indexOf(event.stream), 1);
-            });
-        },
-        sessionDisconnected: function(event) {
-            $rootScope.$apply(function() {
-                OTSession.streams.splice(0, OTSession.streams.length-1);
-            });
-        }
+        OTSession.session.connect(apiKey, token);
     });
-
-    OTSession.session.connect(apiKey, token);
-    
     return OTSession;
 }])
 .directive('otLayout', ['$window', '$parse', 'TB', function($window, $parse, TB) {
@@ -56,10 +61,18 @@ var OpenTokAngular = angular.module('opentok', [])
             var container = TB.initLayoutContainer(element[0], props);
             scope.$watch(function() {
                 return element.children().length;
-            }, container.layout);
+            }, function () {
+                container.layout();
+                setTimeout(function () {
+                    TB.updateViews();
+                }, 100);
+            });
             $window.addEventListener("resize", container.layout);
             scope.$on("otLayout", function() {
                 container.layout();
+                setTimeout(function () {
+                    TB.updateViews();
+                }, 100);
             });
         }
     };
@@ -71,38 +84,43 @@ var OpenTokAngular = angular.module('opentok', [])
             props: '&'
         },
         link: function(scope, element, attrs){
-            var props = scope.props() || {};
-            props.width = props.width ? props.width : $(element).width();
-            props.height = props.height ? props.height : $(element).height();
-            var oldChildren = $(element).children();
-            scope.publisher = TB.initPublisher(attrs.apikey || OTSession.session.apiKey,
-                element[0], props, function (err) {
-                if (err) {
-                    scope.$emit("otPublisherError", err, scope.publisher);
+            document.addEventListener('deviceReady', function () {
+                var props = scope.props() || {};
+                props.width = props.width ? props.width : angular.element(element).css("width");
+                props.height = props.height ? props.height : angular.element(element).css("height");
+                var oldChildren = angular.element(element).children();
+                if (!element[0].getAttribute('id')) {
+                    element[0].setAttribute('id', 'OTPublisher');
                 }
-            });
-            // Make transcluding work manually by putting the children back in there
-            $(element).append(oldChildren);
-            scope.publisher.on({
-                accessAllowed: function(event) {
-                    $(element).addClass("allowed");
-                },
-                loaded: function (event){
-                    scope.$emit("otLayout");
-                }
-            });
-            scope.$on("$destroy", function () {
-                if (scope.session) scope.session.unpublish(scope.publisher);
-                else scope.publisher.destroy();
-            });
-            if (OTSession.session && OTSession.session.connected) {
-                OTSession.session.publish(scope.publisher, function (err) {
+                scope.publisher = TB.initPublisher(attrs.apikey || OTSession.session.apiKey,
+                    element[0].getAttribute('id'), props, function (err) {
                     if (err) {
                         scope.$emit("otPublisherError", err, scope.publisher);
                     }
                 });
-            }
-            OTSession.publishers.push(scope.publisher);
+                // Make transcluding work manually by putting the children back in there
+                angular.element(element).append(oldChildren);
+                scope.publisher.on({
+                    accessAllowed: function(event) {
+                        $(element).addClass("allowed");
+                    },
+                    loaded: function (event){
+                        scope.$emit("otLayout");
+                    }
+                });
+                if (OTSession.session && OTSession.session.connected) {
+                    OTSession.session.publish(scope.publisher, function (err) {
+                        if (err) {
+                            scope.$emit("otPublisherError", err, scope.publisher);
+                        }
+                    });
+                }
+                OTSession.publishers.push(scope.publisher);
+            });
+            scope.$on("$destroy", function () {
+                if (scope.session) scope.session.unpublish(scope.publisher);
+                //else scope.publisher.destroy();
+            });
         }
     };
 }])
@@ -116,10 +134,11 @@ var OpenTokAngular = angular.module('opentok', [])
         link: function(scope, element, attrs){
             var stream = scope.stream,
                 props = scope.props() || {};
-            props.width = props.width ? props.width : $(element).width();
-            props.height = props.height ? props.height : $(element).height();
-            var oldChildren = $(element).children();
-            var subscriber = OTSession.session.subscribe(stream, element[0], props, function (err) {
+            props.width = props.width ? props.width : angular.element(element).css("width");
+            props.height = props.height ? props.height : angular.element(element).css("height");
+            var oldChildren = angular.element(element).children();
+            element[0].setAttribute('id', stream.streamId);
+            var subscriber = OTSession.session.subscribe(stream, element[0].getAttribute('id'), props, function (err) {
                 if (err) {
                     scope.$emit("otSubscriberError", err, subscriber);
                 }
@@ -128,9 +147,9 @@ var OpenTokAngular = angular.module('opentok', [])
                 scope.$emit("otLayout");
             });
             // Make transcluding work manually by putting the children back in there
-            $(element).append(oldChildren);
+            angular.element(element).append(oldChildren);
             scope.$on("$destroy", function () {
-                subscriber.destroy();
+                //subscriber.destroy();
             });
         }
     };
