@@ -14,38 +14,41 @@ var OpenTokAngular = angular.module('opentok', [])
 .factory("TB", function () {
     return TB;
 })
-.factory("OTSession", ['TB', '$rootScope', 'apiKey', 'sessionId', 'token', function (TB, $rootScope, apiKey, sessionId, token) {
+.factory("OTSession", ['TB', '$rootScope', function (TB, $rootScope, apiKey, sessionId, token) {
     var OTSession = {
         streams: [],
-        session: TB.initSession(sessionId),
-        publishers: []
-    };
-
-    OTSession.session.on({
-        sessionConnected: function(event) {
-            OTSession.publishers.forEach(function (publisher) {
-                OTSession.session.publish(publisher);
+        publishers: [],
+        init: function (apiKey, sessionId, token, cb) {
+            this.session = TB.initSession(sessionId);
+            
+            OTSession.session.on({
+                sessionConnected: function(event) {
+                    OTSession.publishers.forEach(function (publisher) {
+                        OTSession.session.publish(publisher);
+                    });
+                },
+                streamCreated: function(event) {
+                    $rootScope.$apply(function() {
+                        OTSession.streams.push(event.stream);
+                    });
+                },
+                streamDestroyed: function(event) {
+                    $rootScope.$apply(function() {
+                        OTSession.streams.splice(OTSession.streams.indexOf(event.stream), 1);
+                    });
+                },
+                sessionDisconnected: function(event) {
+                    $rootScope.$apply(function() {
+                        OTSession.streams.splice(0, OTSession.streams.length-1);
+                    });
+                }
             });
-        },
-        streamCreated: function(event) {
-            $rootScope.$apply(function() {
-                OTSession.streams.push(event.stream);
-            });
-        },
-        streamDestroyed: function(event) {
-            $rootScope.$apply(function() {
-                OTSession.streams.splice(OTSession.streams.indexOf(event.stream), 1);
-            });
-        },
-        sessionDisconnected: function(event) {
-            $rootScope.$apply(function() {
-                OTSession.streams.splice(0, OTSession.streams.length-1);
+            
+            this.session.connect(apiKey, token, function (err) {
+                if (cb) cb(err, OTSession.session);
             });
         }
-    });
-
-    OTSession.session.connect(apiKey, token);
-    
+    };
     return OTSession;
 }])
 .directive('otLayout', ['$window', '$parse', 'TB', function($window, $parse, TB) {

@@ -32,17 +32,24 @@ This component requires that you include the [OpenTok Library](http://www.tokbox
 #### Attributes
 
 * streams - An array of streams in your session. Changes to this will $apply on the $rootScope so your views can bind to it.
-* session - A reference to the OpenTok Session object
-* publishers - an Array of OpenTok publishers in your session. 
+* publishers - an Array of OpenTok publishers in your session.
+* session - The OpenTok Session object. This isn't defined until you have received the callback from init
+
+#### Methods
+
+* init(apiKey, sessionId, token, callback) - This must be called once to connect to the session.
 
 #### Example Usage
 
 ```javascript
 angular.module('MyApp', ['opentok'])
-.controller('MyCtrl', ['$scope', 'OTSession', function($scope, OTSession) {
+.controller('MyCtrl', ['$scope', 'OTSession', 'apiKey', 'sessionId', 'token', function($scope, OTSession, apiKey, sessionId, token) {
+    OTSession.init(apiKey, sessionId, token, function(err, session) {
+      // Here you can do things to the OpenTok session
+      // The err is bubbled up from session.connect
+    });
     $scope.streams = OTSession.streams;
-}]);
-OpenTokAngular.value({
+}]).value({
     apiKey: 'REPLACE_WITH_YOUR_APIKEY',
     sessionId: 'REPLACE_WITH_YOUR_SESSION_ID',
     token: 'REPLACE_WITH_YOUR_TOKEN'

@@ -39,13 +39,13 @@
 
         <script type="text/javascript" charset="utf-8">
             angular.module('demo', ['opentok'])
-            .controller('MyCtrl', ['$scope', 'OTSession', function($scope, OTSession) {
+            .controller('MyCtrl', ['$scope', 'OTSession', 'apiKey', 'sessionId', 'token', function($scope, OTSession, apiKey, sessionId, token) {
+                OTSession.init(apiKey, sessionId, token);
                 $scope.streams = OTSession.streams;
-            }]);
-            OpenTokAngular.value({
-                apiKey: 'REPLACE_WITH_YOUR_APIKEY',
-                sessionId: 'REPLACE_WITH_YOUR_SESSION_ID',
-                token: 'REPLACE_WITH_YOUR_TOKEN'
+            }]).value({
+                apiKey: '1127',
+                sessionId: '2_MX4xMTI3fn5GcmkgQXByIDA0IDAzOjMyOjUwIFBEVCAyMDE0fjAuNjkxOTA4OX5-',
+                token: 'T1==cGFydG5lcl9pZD0xMTI3JnNpZz04Nzk2ZjY2NTRmOWYwNDk4ODlhZmQxYWViODIyNWFiMGQ5MDQyNDEzOmV4cGlyZV90aW1lPTEzOTkxNTI3NzAmbm9uY2U9MjQ4OTQ5JmNyZWF0ZV90aW1lPTEzOTY2MDc1NzAmcm9sZT1tb2RlcmF0b3Imc2Vzc2lvbl9pZD0yX01YNHhNVEkzZm41R2Nta2dRWEJ5SURBMElEQXpPak15T2pVd0lGQkVWQ0F5TURFMGZqQXVOamt4T1RBNE9YNS0='
             });
         </script>
     </body>
