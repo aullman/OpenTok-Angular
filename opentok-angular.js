@@ -132,7 +132,7 @@ var OpenTokAngular = angular.module('opentok', [])
             });
             scope.$on("$destroy", function () {
                 if (scope.session) scope.session.unpublish(scope.publisher);
-                //else scope.publisher.destroy();
+                scope.publisher.destroy();
             });
         }
     };
