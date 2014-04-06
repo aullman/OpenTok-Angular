@@ -113,14 +113,17 @@ var OpenTokAngular = angular.module('opentok', [])
                 });
                 // Make transcluding work manually by putting the children back in there
                 angular.element(element).append(oldChildren);
-                scope.publisher.on({
-                    accessAllowed: function(event) {
-                        $(element).addClass("allowed");
-                    },
-                    loaded: function (event){
-                        scope.$emit("otLayout");
-                    }
-                });
+                // scope.publisher.on({
+                //     accessAllowed: function(event) {
+                //         $(element).addClass("allowed");
+                //     },
+                //     loaded: function (event){
+                //         scope.$emit("otLayout");
+                //     }
+                // });
+                setTimeout(function () {
+                    scope.$emit("otLayout");
+                }, 1000);
                 if (OTSession.session && OTSession.session.connected) {
                     OTSession.session.publish(scope.publisher, function (err) {
                         if (err) {
@@ -156,9 +159,12 @@ var OpenTokAngular = angular.module('opentok', [])
                     scope.$emit("otSubscriberError", err, subscriber);
                 }
             });
-            subscriber.on("loaded", function () {
+            // subscriber.on("loaded", function () {
+            //     scope.$emit("otLayout");
+            // });
+            setTimeout(function () {
                 scope.$emit("otLayout");
-            });
+            }, 1000);
             // Make transcluding work manually by putting the children back in there
             angular.element(element).append(oldChildren);
             scope.$on("$destroy", function () {
