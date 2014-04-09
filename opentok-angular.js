@@ -98,7 +98,8 @@ var OpenTokAngular = angular.module('opentok', [])
                 if (scope.session) scope.session.unpublish(scope.publisher);
                 else scope.publisher.destroy();
             });
-            if (OTSession.session && OTSession.session.connected) {
+            if (OTSession.session && (OTSession.session.connected ||
+                    (OTSession.session.isConnected && OTSession.session.isConnected()))) {
                 OTSession.session.publish(scope.publisher, function (err) {
                     if (err) {
                         scope.$emit("otPublisherError", err, scope.publisher);
