@@ -97,6 +97,10 @@ var OpenTokAngular = angular.module('opentok', [])
             scope.$on("$destroy", function () {
                 if (scope.session) scope.session.unpublish(scope.publisher);
                 else scope.publisher.destroy();
+                OTSession.publishers = OTSession.publishers.filter(function (publisher) {
+                    return publisher !== scope.publisher;
+                });
+                scope.publisher = null;
             });
             if (OTSession.session && (OTSession.session.connected ||
                     (OTSession.session.isConnected && OTSession.session.isConnected()))) {
