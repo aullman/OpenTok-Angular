@@ -124,7 +124,8 @@ var OpenTokAngular = angular.module('opentok', [])
                 setTimeout(function () {
                     scope.$emit("otLayout");
                 }, 1000);
-                if (OTSession.session && OTSession.session.connected) {
+                if (OTSession.session && (OTSession.session.connected ||
+                        (OTSession.session.isConnected && OTSession.session.isConnected()))) {
                     OTSession.session.publish(scope.publisher, function (err) {
                         if (err) {
                             scope.$emit("otPublisherError", err, scope.publisher);
@@ -136,6 +137,10 @@ var OpenTokAngular = angular.module('opentok', [])
             scope.$on("$destroy", function () {
                 if (scope.session) scope.session.unpublish(scope.publisher);
                 scope.publisher.destroy();
+                OTSession.publishers = OTSession.publishers.filter(function (publisher) {
+                    return publisher !== scope.publisher;
+                });
+                scope.publisher = null;
             });
         }
     };
