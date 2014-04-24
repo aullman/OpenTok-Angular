@@ -39,7 +39,7 @@ var OpenTokAngular = angular.module('opentok', [])
                 },
                 sessionDisconnected: function(event) {
                     $rootScope.$apply(function() {
-                        OTSession.streams.splice(0, OTSession.streams.length-1);
+                        OTSession.streams.splice(0, OTSession.streams.length);
                     });
                 }
             });
