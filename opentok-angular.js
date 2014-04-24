@@ -34,7 +34,7 @@ var OpenTokAngular = angular.module('opentok', [])
         publishers: [],
         init: function (apiKey, sessionId, token, cb) {
           OTReady(function () {
-            OTSession.session = TB.initSession(sessionId);
+            OTSession.session = TB.initSession(apiKey, sessionId);
             
             OTSession.session.on({
                 sessionConnected: function(event) {
@@ -60,7 +60,7 @@ var OpenTokAngular = angular.module('opentok', [])
             });
             
             if (cb) cb(null, OTSession.session);
-            OTSession.session.connect(apiKey, token);
+            OTSession.session.connect(token);
           });
         }
     };
