@@ -47,11 +47,13 @@ var OpenTokAngular = angular.module('opentok', [])
             this.session.connect(apiKey, token, function (err) {
                 if (cb) cb(err, OTSession.session);
             });
+            this.trigger('init');
         }
     };
+    TB.$.eventing(OTSession);
     return OTSession;
 }])
-.directive('otLayout', ['$window', '$parse', 'TB', function($window, $parse, TB) {
+.directive('otLayout', ['$window', '$parse', 'TB', 'OTSession', function($window, $parse, TB, OTSession) {
     return {
         restrict: 'E',
         link: function(scope, element, attrs) {
@@ -61,9 +63,16 @@ var OpenTokAngular = angular.module('opentok', [])
                 return element.children().length;
             }, container.layout);
             $window.addEventListener("resize", container.layout);
-            scope.$on("otLayout", function() {
-                container.layout();
-            });
+            scope.$on("otLayout", container.layout);
+            var listenForStreamChange = function listenForStreamChange(session) {
+                OTSession.session.on("streamPropertyChanged", function (event) {
+                    if (event.changedProperty === 'videoDimensions') {
+                        container.layout();
+                    }
+                });
+            };
+            if (OTSession.session) listenForStreamChange();
+            else OTSession.on("init", listenForStreamChange);
         }
     };
 }])
