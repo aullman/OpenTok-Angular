@@ -11,17 +11,30 @@ It only works with the [OpenTok API for WebRTC](http://www.tokbox.com/opentok/we
 
 This Angular Module was originally created to power [opentok-meet](https://meet.tokbox.com/) ([github](https://github.com/aullman/opentok-meet)). It's a pretty good example of how to use it.
 
-## Installation
+## Usage
 
 This component can be installed using [bower](http://bower.io/). Simply run `bower install opentok-angular`. Or you can clone this repo and include the `opentok-angular.min.js` file in your page.
 
-If you want to try out the demo you need to:
+## Running the demo
+
+To run the [demo.html](demo.html) file.
 
 1. Clone this repo
 2. Replace your apiKey, sessionId and token in the [demo.html](demo.html) file
-3. Run `bower install` in the directory.
+3. Run `npm install`
 4. Serve this directory on a web browser.
 5. Visit demo.html in your browser.
+
+## Building and Testing
+
+If you want to contribute to this project you will need to know how to build and test.
+
+```
+npm install
+npm test
+```
+
+Easy as that.
 
 ## Dependencies
 
