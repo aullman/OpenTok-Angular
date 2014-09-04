@@ -25,5 +25,8 @@
     "opentok-layout-js": "~0.0.6",
     "angular": "~1.2.15",
     "jquery": "~2.1.0"
+  },
+  "devDependencies": {
+    "angular-mocks": "~1.2.23"
   }
 }

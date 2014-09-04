@@ -76,7 +76,7 @@ var OpenTokAngular = angular.module('opentok', [])
         }
     };
 }])
-.directive('otPublisher', ['$document', '$window', 'OTSession', function($document, $window, OTSession) {
+.directive('otPublisher', ['OTSession', function(OTSession) {
     return {
         restrict: 'E',
         scope: {
@@ -104,7 +104,7 @@ var OpenTokAngular = angular.module('opentok', [])
                 }
             });
             scope.$on("$destroy", function () {
-                if (scope.session) scope.session.unpublish(scope.publisher);
+                if (OTSession.session) OTSession.session.unpublish(scope.publisher);
                 else scope.publisher.destroy();
                 OTSession.publishers = OTSession.publishers.filter(function (publisher) {
                     return publisher !== scope.publisher;
@@ -147,7 +147,7 @@ var OpenTokAngular = angular.module('opentok', [])
             // Make transcluding work manually by putting the children back in there
             $(element).append(oldChildren);
             scope.$on("$destroy", function () {
-                subscriber.destroy();
+                OTSession.session.unsubscribe(subscriber);
             });
         }
     };
