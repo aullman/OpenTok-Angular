@@ -1,3 +1,5 @@
+[![Build Status](https://travis-ci.org/aullman/OpenTok-Angular.svg?branch=master)](https://travis-ci.org/aullman/OpenTok-Angular)
+
 OpenTok-Angular
 ===============
 
