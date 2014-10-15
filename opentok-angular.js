@@ -96,6 +96,12 @@ var OpenTokAngular = angular.module('opentok', [])
             // Make transcluding work manually by putting the children back in there
             $(element).append(oldChildren);
             scope.publisher.on({
+                accessDenied: function (event) {
+                    scope.$emit("otAccessDenied");
+                },
+                accessDialogOpened: function (event) {
+                    scope.$emit("otAccessDialogOpened");
+                },
                 accessAllowed: function(event) {
                     $(element).addClass("allowed");
                 },
