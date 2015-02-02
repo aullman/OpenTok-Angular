@@ -102,8 +102,12 @@ var OpenTokAngular = angular.module('opentok', [])
                 accessDialogOpened: function (event) {
                     scope.$emit("otAccessDialogOpened");
                 },
+                accessDialogClosed: function(event){
+                    scope.$emit("otAccessDialogClosed");
+                },
                 accessAllowed: function(event) {
                     $(element).addClass("allowed");
+                    scope.$emit("otAccessAllowed");
                 },
                 loaded: function (event){
                     scope.$emit("otLayout");
