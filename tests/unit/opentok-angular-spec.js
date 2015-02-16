@@ -204,6 +204,26 @@ describe('opentok-angular', function () {
         }, 10);
       });
       
+      it('emits otAccessAllowed on publisher accessAllowed', function (done) {
+        scope.$on('otAccessAllowed', done);
+        publisher.trigger('accessAllowed');
+      });
+      
+      it('emits otAccessDenied on publisher accessDenied', function (done) {
+        scope.$on('otAccessDenied', done);
+        publisher.trigger('accessDenied');
+      });
+      
+      it('emits otAccessDialogOpened on publisher accessDialogOpened', function (done) {
+        scope.$on('otAccessDialogOpened', done);
+        publisher.trigger('accessDialogOpened');
+      });
+      
+      it('emits otAccessDialogClosed on publisher accessDialogClosed', function (done) {
+        scope.$on('otAccessDialogClosed', done);
+        publisher.trigger('accessDialogClosed');
+      });
+      
       it('adds the publisher to the OTSession.publishers', function () {
         expect(OTSession.publishers).toContain(publisher);
       });
