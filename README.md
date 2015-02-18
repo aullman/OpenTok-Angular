@@ -1,4 +1,6 @@
 [![Build Status](https://travis-ci.org/aullman/OpenTok-Angular.svg?branch=master)](https://travis-ci.org/aullman/OpenTok-Angular)
+[![Code Climate](https://codeclimate.com/github/aullman/OpenTok-Angular/badges/gpa.svg)](https://codeclimate.com/github/aullman/OpenTok-Angular)
+[![Test Coverage](https://codeclimate.com/github/aullman/OpenTok-Angular/badges/coverage.svg)](https://codeclimate.com/github/aullman/OpenTok-Angular)
 
 OpenTok-Angular
 ===============
