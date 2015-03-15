@@ -22,7 +22,7 @@
     "tests"
   ],
   "dependencies": {
-    "opentok-layout-js": "~0.0.6",
+    "opentok-layout-js": "~0.1.0",
     "angular": "~1.3.10",
     "jquery": "~2.1.0"
   },
