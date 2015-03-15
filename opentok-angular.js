@@ -1,6 +1,6 @@
 /*!
  *  opentok-angular (https://github.com/aullman/OpenTok-Angular)
- *  
+ *
  *  Angular module for OpenTok
  *
  *  @Author: Adam Ullman (http://github.com/aullman)
@@ -20,7 +20,7 @@ var OpenTokAngular = angular.module('opentok', [])
         publishers: [],
         init: function (apiKey, sessionId, token, cb) {
             this.session = TB.initSession(sessionId);
-            
+
             OTSession.session.on({
                 sessionConnected: function(event) {
                     OTSession.publishers.forEach(function (publisher) {
@@ -43,7 +43,7 @@ var OpenTokAngular = angular.module('opentok', [])
                     });
                 }
             });
-            
+
             this.session.connect(apiKey, token, function (err) {
                 if (cb) cb(err, OTSession.session);
             });
@@ -84,9 +84,9 @@ var OpenTokAngular = angular.module('opentok', [])
         },
         link: function(scope, element, attrs){
             var props = scope.props() || {};
-            props.width = props.width ? props.width : $(element).width();
-            props.height = props.height ? props.height : $(element).height();
-            var oldChildren = $(element).children();
+            props.width = props.width ? props.width : angular.element(element).width();
+            props.height = props.height ? props.height : angular.element(element).height();
+            var oldChildren = angular.element(element).children();
             scope.publisher = TB.initPublisher(attrs.apikey || OTSession.session.apiKey,
                 element[0], props, function (err) {
                 if (err) {
@@ -94,7 +94,7 @@ var OpenTokAngular = angular.module('opentok', [])
                 }
             });
             // Make transcluding work manually by putting the children back in there
-            $(element).append(oldChildren);
+            angular.element(element).append(oldChildren);
             scope.publisher.on({
                 accessDenied: function (event) {
                     scope.$emit("otAccessDenied");
@@ -106,7 +106,7 @@ var OpenTokAngular = angular.module('opentok', [])
                     scope.$emit("otAccessDialogClosed");
                 },
                 accessAllowed: function(event) {
-                    $(element).addClass("allowed");
+                    angular.element(element).addClass("allowed");
                     scope.$emit("otAccessAllowed");
                 },
                 loaded: function (event){
@@ -143,9 +143,9 @@ var OpenTokAngular = angular.module('opentok', [])
         link: function(scope, element, attrs){
             var stream = scope.stream,
                 props = scope.props() || {};
-            props.width = props.width ? props.width : $(element).width();
-            props.height = props.height ? props.height : $(element).height();
-            var oldChildren = $(element).children();
+            props.width = props.width ? props.width : angular.element(element).width();
+            props.height = props.height ? props.height : angular.element(element).height();
+            var oldChildren = angular.element(element).children();
             var subscriber = OTSession.session.subscribe(stream, element[0], props, function (err) {
                 if (err) {
                     scope.$emit("otSubscriberError", err, subscriber);
@@ -155,7 +155,7 @@ var OpenTokAngular = angular.module('opentok', [])
                 scope.$emit("otLayout");
             });
             // Make transcluding work manually by putting the children back in there
-            $(element).append(oldChildren);
+            angular.element(element).append(oldChildren);
             scope.$on("$destroy", function () {
                 OTSession.session.unsubscribe(subscriber);
             });
