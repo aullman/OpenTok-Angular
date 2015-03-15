@@ -111,6 +111,12 @@ var OpenTokAngular = angular.module('opentok', [])
                 },
                 loaded: function (event){
                     scope.$emit("otLayout");
+                },
+                streamCreated: function (event) {
+                  scope.$emit("otStreamCreated");
+                },
+                streamDestroyed: function (event) {
+                  scope.$emit("otStreamDestroyed");
                 }
             });
             scope.$on("$destroy", function () {
