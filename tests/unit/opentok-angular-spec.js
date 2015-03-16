@@ -4,7 +4,7 @@ describe('opentok-angular', function () {
     module('opentok', function ($provide) {
       OT.initSession = function () {
         session = {
-          isConnected: jasmine.createSpy('isConnected').and.returnValue(true), 
+          isConnected: jasmine.createSpy('isConnected').and.returnValue(true),
           signal: jasmine.createSpy('signal'),
           connect: jasmine.createSpy('connect'),
           publish: jasmine.createSpy('publish'),
@@ -32,14 +32,14 @@ describe('opentok-angular', function () {
       $rootScope = _$rootScope_;
     });
   });
-  
+
   describe('OTSession', function () {
     it('defines the right api', function () {
       expect(OTSession.init).toEqual(jasmine.any(Function));
       expect(OTSession.streams).toEqual(jasmine.any(Array));
       expect(OTSession.publishers).toEqual(jasmine.any(Array));
     });
-    
+
     describe('init called', function () {
       var apiKey = 'mockAPIKey',
         sessionId = 'mockSessionId',
@@ -48,7 +48,7 @@ describe('opentok-angular', function () {
       beforeEach(function () {
         OTSession.init(apiKey, sessionId, token, cb);
       });
-    
+
       it('calls OT.initSession, session.on and session.connect when you call init', function () {
         expect(OT.initSession).toHaveBeenCalledWith(sessionId);
         expect(OTSession.session).toBeDefined();
@@ -58,11 +58,11 @@ describe('opentok-angular', function () {
         }));
         expect(OTSession.session.connect).toHaveBeenCalledWith(apiKey, token, jasmine.any(Function));
       });
-      
+
       it('triggers init on init', function () {
         expect(OTSession.trigger).toHaveBeenCalledWith('init');
       });
-    
+
       it('adds streams on streamCreated', function (done) {
         var stream = {};
         session.trigger('streamCreated', {stream: stream});
@@ -71,7 +71,7 @@ describe('opentok-angular', function () {
           done();
         }, 10);
       });
-      
+
       it('removes streams on streamDestroyed', function (done) {
         var stream = {};
         session.trigger('streamCreated', {stream: stream});
@@ -81,7 +81,7 @@ describe('opentok-angular', function () {
           done();
         }, 10);
       });
-      
+
       it('empties the streams array on sessionDisconnected', function (done) {
         session.trigger('streamCreated', {stream: {}});
         session.trigger('streamCreated', {stream: {}});
@@ -92,7 +92,7 @@ describe('opentok-angular', function () {
           done();
         }, 10);
       });
-      
+
       it('publishes publishers on sessionConnected', function (done) {
         var publisher = {};
         OTSession.publishers.push(publisher);
@@ -112,7 +112,7 @@ describe('opentok-angular', function () {
         cb = jasmine.createSpy('cb');
       OTSession.init(apiKey, sessionId, token, cb);
     });
-    
+
     describe('ot-layout', function () {
       var element, scope, layout, $window;
       beforeEach(inject(function ($rootScope, $compile, _$window_) {
@@ -129,20 +129,20 @@ describe('opentok-angular', function () {
         element = $compile(element)(scope);
         scope.$digest();
       }));
-      
+
       it('calls OT.initLayoutContainer with the right props', function () {
         expect(OT.initLayoutContainer).toHaveBeenCalledWith(element[0], jasmine.objectContaining({
           animate: true
         }));
       });
-      
+
       it('calls layout if you add a child', function () {
         var numCalls = layout.calls.count();
-        element.append($('<div></div>'));
+        element.append(angular.element('<div></div>'));
         scope.$digest();
         expect(layout.calls.count()).toBeGreaterThan(numCalls);
       });
-      
+
       it('calls layout if you get a streamPropertyChanged for videoDimentions', function (done) {
         var numCalls = layout.calls.count();
         session.trigger('streamPropertyChanged', {changedProperty: 'videoDimensions'});
@@ -151,7 +151,7 @@ describe('opentok-angular', function () {
           done();
         }, 10);
       });
-      
+
       it ('calls layout if the window resizes', function (done) {
         var numCalls = layout.calls.count();
         $window.dispatchEvent(new Event('resize'));
@@ -161,7 +161,7 @@ describe('opentok-angular', function () {
         }, 10);
       });
     });
-    
+
     describe('ot-publisher', function () {
       var element, scope, publisher;
       beforeEach(inject(function ($rootScope, $compile) {
@@ -180,22 +180,22 @@ describe('opentok-angular', function () {
         scope.$digest();
         publisher = element.isolateScope().publisher;
       }));
-      
+
       it('calls initPublisher and defines scope.publisher', function () {
         expect(OT.initPublisher).toHaveBeenCalledWith('mockAPIKey', element[0],
           jasmine.objectContaining({name: 'mockName'}), jasmine.any(Function));
         expect(publisher).toBeDefined();
       });
-      
+
       it('maintains the contents of <ot-publisher>', function () {
         expect(element.find('#contents').length).toBe(1);
       });
-      
+
       it('emits otLayout when the publisher is loaded', function (done) {
         scope.$on('otLayout', done);
         publisher.trigger('loaded');
       });
-      
+
       it('adds an allowed class', function (done) {
         publisher.trigger('accessAllowed');
         setTimeout(function () {
@@ -203,35 +203,35 @@ describe('opentok-angular', function () {
           done();
         }, 10);
       });
-      
+
       it('emits otAccessAllowed on publisher accessAllowed', function (done) {
         scope.$on('otAccessAllowed', done);
         publisher.trigger('accessAllowed');
       });
-      
+
       it('emits otAccessDenied on publisher accessDenied', function (done) {
         scope.$on('otAccessDenied', done);
         publisher.trigger('accessDenied');
       });
-      
+
       it('emits otAccessDialogOpened on publisher accessDialogOpened', function (done) {
         scope.$on('otAccessDialogOpened', done);
         publisher.trigger('accessDialogOpened');
       });
-      
+
       it('emits otAccessDialogClosed on publisher accessDialogClosed', function (done) {
         scope.$on('otAccessDialogClosed', done);
         publisher.trigger('accessDialogClosed');
       });
-      
+
       it('adds the publisher to the OTSession.publishers', function () {
         expect(OTSession.publishers).toContain(publisher);
       });
-      
+
       it('calls session.publish if there is a session', function () {
         expect(session.publish).toHaveBeenCalledWith(publisher, jasmine.any(Function));
       });
-      
+
       it('cleans up when its destroyed', function (done) {
         element.isolateScope().$emit('$destroy');
         setTimeout(function () {
@@ -241,23 +241,23 @@ describe('opentok-angular', function () {
           done();
         }, 10);
       });
-      
+
       it('emits otPublisherError if there is an error on initPublisher', function (done) {
         scope.$on('otPublisherError', done);
         OT.initPublisher.calls.argsFor(0)[3]({});
       });
-      
+
       it('emits otPublisherError if there is an error on session.publish', function (done) {
         scope.$on('otPublisherError', done);
         session.publish.calls.argsFor(0)[1]({});
       });
-      
+
       it('uses the right width and height', function () {
         expect(OT.initPublisher.calls.argsFor(0)[2].width).toBe(200);
         expect(OT.initPublisher.calls.argsFor(0)[2].height).toBe(300);
       });
     });
-    
+
     describe('ot-subscriber', function () {
       var element, scope;
       beforeEach(inject(function ($rootScope, $compile) {
@@ -269,17 +269,17 @@ describe('opentok-angular', function () {
         element = $compile(element)(scope);
         scope.$digest();
       }));
-      
+
       it('calls session.subscribe', function () {
         expect(session.subscribe).toHaveBeenCalledWith(scope.stream, element[0], jasmine.objectContaining({
           subscribeToVideo: false
         }), jasmine.any(Function));
       });
-      
+
       it('maintains the contents of <ot-subscriber>', function () {
         expect(element.find('#contents').length).toBe(1);
       });
-      
+
       it('cleans up when its destroyed', function (done) {
         element.isolateScope().$emit('$destroy');
         setTimeout(function () {
@@ -287,22 +287,22 @@ describe('opentok-angular', function () {
           done();
         }, 10);
       });
-      
+
       it('emits an otLayout when loaded', function (done) {
         scope.$on('otLayout', done);
         subscriber.trigger('loaded');
       });
-      
+
       it('emits an otSubscriberError if there is an error on subscribe', function (done) {
         scope.$on('otSubscriberError', done);
         session.subscribe.calls.argsFor(0)[3]({});
       });
-      
+
       it('uses the right width and height', function () {
         expect(session.subscribe.calls.argsFor(0)[2].width).toBe(200);
         expect(session.subscribe.calls.argsFor(0)[2].height).toBe(300);
       });
     });
   });
-  
+
 });
