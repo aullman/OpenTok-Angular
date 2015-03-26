@@ -17,6 +17,7 @@ var OpenTokAngular = angular.module('opentok', [])
 .factory("OTSession", ['TB', '$rootScope', function (TB, $rootScope) {
     var OTSession = {
         streams: [],
+        connections: [],
         publishers: [],
         init: function (apiKey, sessionId, token, cb) {
             this.session = TB.initSession(sessionId);
@@ -40,6 +41,16 @@ var OpenTokAngular = angular.module('opentok', [])
                 sessionDisconnected: function(event) {
                     $rootScope.$apply(function() {
                         OTSession.streams.splice(0, OTSession.streams.length);
+                    });
+                },
+                connectionCreated: function (event) {
+                    $rootScope.$apply(function() {
+                        OTSession.connections.push(event.connection);
+                    });
+                },
+                connectionDestroyed: function (event) {
+                    $rootScope.$apply(function() {
+                        OTSession.connections.splice(OTSession.connections.indexOf(event.connection), 1);
                     });
                 }
             });

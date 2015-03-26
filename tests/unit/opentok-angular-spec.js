@@ -82,6 +82,25 @@ describe('opentok-angular', function () {
         }, 10);
       });
 
+      it('adds connections on connectionCreated', function (done) {
+        var connection = {};
+        session.trigger('connectionCreated', {connection: connection});
+        setTimeout(function () {
+          expect(OTSession.connections).toContain(connection);
+          done();
+        }, 10);
+      });
+
+      it('removes connections on connectionDestroyed', function (done) {
+        var connection = {};
+        session.trigger('connectionCreated', {connection: connection});
+        session.trigger('connectionDestroyed', {connection: connection});
+        setTimeout(function () {
+          expect(OTSession.connections).not.toContain(connection);
+          done();
+        }, 10);
+      });
+
       it('empties the streams array on sessionDisconnected', function (done) {
         session.trigger('streamCreated', {stream: {}});
         session.trigger('streamCreated', {stream: {}});
