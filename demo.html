@@ -25,7 +25,6 @@
                     props="{style: {nameDisplayMode: 'off'}}">
                 </ot-subscriber>
                 <ot-publisher id="publisher" 
-                    apiKey="<%=apiKey%>" 
                     props="{style: {nameDisplayMode: 'off'}, resolution: '1280x720', frameRate: 30}">
                 </ot-publisher>
             </ot-layout>
@@ -43,9 +42,9 @@
                 OTSession.init(apiKey, sessionId, token);
                 $scope.streams = OTSession.streams;
             }]).value({
-                apiKey: '1127',
-                sessionId: '2_MX4xMTI3fn5GcmkgQXByIDA0IDAzOjMyOjUwIFBEVCAyMDE0fjAuNjkxOTA4OX5-',
-                token: 'T1==cGFydG5lcl9pZD0xMTI3JnNpZz04Nzk2ZjY2NTRmOWYwNDk4ODlhZmQxYWViODIyNWFiMGQ5MDQyNDEzOmV4cGlyZV90aW1lPTEzOTkxNTI3NzAmbm9uY2U9MjQ4OTQ5JmNyZWF0ZV90aW1lPTEzOTY2MDc1NzAmcm9sZT1tb2RlcmF0b3Imc2Vzc2lvbl9pZD0yX01YNHhNVEkzZm41R2Nta2dRWEJ5SURBMElEQXpPak15T2pVd0lGQkVWQ0F5TURFMGZqQXVOamt4T1RBNE9YNS0='
+                apiKey: 'YOUR_APIKEY',
+                sessionId: 'YOUR_SESSION_ID',
+                token: 'YOUR_TOKEN'
             });
         </script>
     </body>
