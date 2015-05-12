@@ -104,6 +104,10 @@ var OpenTokAngular = angular.module('opentok', [])
                     scope.$emit("otPublisherError", err, scope.publisher);
                 }
             });
+            //@Hack to prevet dragging the facePublisher (Customization)
+            if (element.prop('id') == 'facePublisher' && element.prop('draggable')){
+                element.on('mousedown', function(e){ e.preventDefault(); return false;});
+            }
             // Make transcluding work manually by putting the children back in there
             angular.element(element).append(oldChildren);
             scope.publisher.on({
