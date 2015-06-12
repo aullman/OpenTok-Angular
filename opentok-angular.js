@@ -27,31 +27,37 @@ var OpenTokAngular = angular.module('opentok', [])
                     OTSession.publishers.forEach(function (publisher) {
                         OTSession.session.publish(publisher);
                     });
+                    $rootScope.$broadcast("sessionConnected", {'event': event});
                 },
                 streamCreated: function(event) {
                     $rootScope.$apply(function() {
                         OTSession.streams.push(event.stream);
                     });
+                    $rootScope.$broadcast("streamCreated", {'event': event});
                 },
                 streamDestroyed: function(event) {
                     $rootScope.$apply(function() {
                         OTSession.streams.splice(OTSession.streams.indexOf(event.stream), 1);
                     });
+                    $rootScope.$broadcast("streamDestroyed", {'event': event});
                 },
                 sessionDisconnected: function(event) {
                     $rootScope.$apply(function() {
                         OTSession.streams.splice(0, OTSession.streams.length);
                     });
+                    $rootScope.$broadcast("sessionDisconnected", {'event': event});
                 },
                 connectionCreated: function (event) {
                     $rootScope.$apply(function() {
                         OTSession.connections.push(event.connection);
                     });
+                    $rootScope.$broadcast("connectionCreated", {'event': event});
                 },
                 connectionDestroyed: function (event) {
                     $rootScope.$apply(function() {
                         OTSession.connections.splice(OTSession.connections.indexOf(event.connection), 1);
                     });
+                    $rootScope.$broadcast("connectionDestroyed", {'event': event});
                 }
             });
 
