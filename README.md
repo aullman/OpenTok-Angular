@@ -90,6 +90,7 @@ This directive requires the OpenTok JavaScript WebRTC library to be included in 
 #### Events
 
 * `"otPublisherError"` - This event is emitted on the scope if there is an error creating or publishing this publisher.
+* `sessionConnected, streamCreated, streamDestroyed, sessionDisconnected, connectionCreated, connectionDestroyed` are broadcasted
 
 #### Example Usage
 
