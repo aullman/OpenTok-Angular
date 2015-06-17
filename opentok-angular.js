@@ -70,15 +70,19 @@ var OpenTokAngular = angular.module('opentok', [])
         link: function(scope, element, attrs) {
             var props = $parse(attrs.props)();
             var container = TB.initLayoutContainer(element[0], props);
+            var layout = function () {
+              container.layout();
+              scope.$emit('otLayoutComplete');
+            };
             scope.$watch(function() {
                 return element.children().length;
-            }, container.layout);
-            $window.addEventListener("resize", container.layout);
-            scope.$on("otLayout", container.layout);
+            }, layout);
+            $window.addEventListener("resize", layout);
+            scope.$on("otLayout", layout);
             var listenForStreamChange = function listenForStreamChange(session) {
                 OTSession.session.on("streamPropertyChanged", function (event) {
                     if (event.changedProperty === 'videoDimensions') {
-                        container.layout();
+                        layout();
                     }
                 });
             };

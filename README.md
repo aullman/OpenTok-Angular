@@ -151,6 +151,7 @@ This directive uses the [opentok-layout-js](https://github.com/aullman/opentok-l
 #### Events
 
 * otLayout - If you emit the "otLayout" event on the layout container's scope or a child of the layout container then it will call the `layout()` method of [opentok-layout-js](https://github.com/aullman/opentok-layout-js). The Publisher and Subscriber directives automatically trigger these events when they are loaded, it is also triggered on window resize. But if there are other times when you want to redraw the layout container you can trigger it manually.
+* otLayoutComplete - When the layout method has been called `'otLayoutComplete'` is emitted on the scope.
 
 #### Example Usage
 

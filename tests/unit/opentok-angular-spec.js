@@ -1,7 +1,7 @@
 describe('opentok-angular', function () {
   var OTSession, session, $rootScope, subscriber;
   beforeEach(function () {
-    module('opentok', function ($provide) {
+    module('opentok', function () {
       OT.initSession = function () {
         session = {
           isConnected: jasmine.createSpy('isConnected').and.returnValue(true),
@@ -56,7 +56,8 @@ describe('opentok-angular', function () {
           streamCreated: jasmine.any(Function),
           streamDestroyed: jasmine.any(Function)
         }));
-        expect(OTSession.session.connect).toHaveBeenCalledWith(apiKey, token, jasmine.any(Function));
+        expect(OTSession.session.connect).toHaveBeenCalledWith(apiKey, token,
+          jasmine.any(Function));
       });
 
       it('triggers init on init', function () {
@@ -149,35 +150,45 @@ describe('opentok-angular', function () {
         scope.$digest();
       }));
 
+      afterEach(function () {
+        scope = null;
+      });
+
       it('calls OT.initLayoutContainer with the right props', function () {
         expect(OT.initLayoutContainer).toHaveBeenCalledWith(element[0], jasmine.objectContaining({
           animate: true
         }));
       });
 
-      it('calls layout if you add a child', function () {
+      it('calls layout if you add a child', function (done) {
         var numCalls = layout.calls.count();
+        var removeHandler = scope.$on('otLayoutComplete', function () {
+          removeHandler();
+          expect(layout.calls.count()).toBeGreaterThan(numCalls);
+          done();
+        });
         element.append(angular.element('<div></div>'));
         scope.$digest();
-        expect(layout.calls.count()).toBeGreaterThan(numCalls);
       });
 
       it('calls layout if you get a streamPropertyChanged for videoDimentions', function (done) {
         var numCalls = layout.calls.count();
-        session.trigger('streamPropertyChanged', {changedProperty: 'videoDimensions'});
-        setTimeout(function () {
+        var removeHandler = scope.$on('otLayoutComplete', function () {
+          removeHandler();
           expect(layout.calls.count()).toBeGreaterThan(numCalls);
           done();
-        }, 10);
+        });
+        session.trigger('streamPropertyChanged', {changedProperty: 'videoDimensions'});
       });
 
       it ('calls layout if the window resizes', function (done) {
         var numCalls = layout.calls.count();
-        $window.dispatchEvent(new Event('resize'));
-        setTimeout(function () {
+        var removeHandler = scope.$on('otLayoutComplete', function () {
+          removeHandler();
           expect(layout.calls.count()).toBeGreaterThan(numCalls);
           done();
-        }, 10);
+        });
+        $window.dispatchEvent(new Event('resize'));
       });
     });
 
@@ -193,8 +204,8 @@ describe('opentok-angular', function () {
           return publisher;
         });
         scope = $rootScope.$new();
-        element = '<ot-publisher apiKey="mockAPIKey" props="{name:\'mockName\'}" style="width:200px;height:300px;">' +
-          '<div id="contents"></div></ot-publisher>';
+        element = '<ot-publisher apiKey="mockAPIKey" props="{name:\'mockName\'}" ' +
+          'style="width:200px;height:300px;"><div id="contents"></div></ot-publisher>';
         element = $compile(element)(scope);
         scope.$digest();
         publisher = element.isolateScope().publisher;
@@ -283,16 +294,17 @@ describe('opentok-angular', function () {
         OTSession.init('mockAPIKey', 'mockSessionId', 'mockToken');
         scope = $rootScope.$new();
         scope.stream = {};
-        element = '<ot-subscriber stream="stream" props="{subscribeToVideo:false}" style="width:200px;height:300px;">' +
-          '<div id="contents"></div></ot-publisher>';
+        element = '<ot-subscriber stream="stream" props="{subscribeToVideo:false}" ' +
+          'style="width:200px;height:300px;"><div id="contents"></div></ot-publisher>';
         element = $compile(element)(scope);
         scope.$digest();
       }));
 
       it('calls session.subscribe', function () {
-        expect(session.subscribe).toHaveBeenCalledWith(scope.stream, element[0], jasmine.objectContaining({
-          subscribeToVideo: false
-        }), jasmine.any(Function));
+        expect(session.subscribe).toHaveBeenCalledWith(scope.stream, element[0],
+          jasmine.objectContaining({
+            subscribeToVideo: false
+          }), jasmine.any(Function));
       });
 
       it('maintains the contents of <ot-subscriber>', function () {
