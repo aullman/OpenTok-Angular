@@ -21,7 +21,7 @@ angular.module('opentok', [])
         connections: [],
         publishers: [],
         init: function(apiKey, sessionId, token, cb) {
-          this.session = TB.initSession(sessionId);
+          this.session = TB.initSession(apiKey, sessionId);
 
           OTSession.session.on({
             sessionConnected: function() {
@@ -56,7 +56,7 @@ angular.module('opentok', [])
             }
           });
 
-          this.session.connect(apiKey, token, function(err) {
+          this.session.connect(token, function(err) {
             if (cb) cb(err, OTSession.session);
           });
           this.trigger('init');

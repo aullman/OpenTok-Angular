@@ -50,13 +50,13 @@ describe('opentok-angular', function () {
       });
 
       it('calls OT.initSession, session.on and session.connect when you call init', function () {
-        expect(OT.initSession).toHaveBeenCalledWith(sessionId);
+        expect(OT.initSession).toHaveBeenCalledWith(apiKey, sessionId);
         expect(OTSession.session).toBeDefined();
         expect(OTSession.session.on).toHaveBeenCalledWith(jasmine.objectContaining({
           streamCreated: jasmine.any(Function),
           streamDestroyed: jasmine.any(Function)
         }));
-        expect(OTSession.session.connect).toHaveBeenCalledWith(apiKey, token,
+        expect(OTSession.session.connect).toHaveBeenCalledWith(token,
           jasmine.any(Function));
       });
 
