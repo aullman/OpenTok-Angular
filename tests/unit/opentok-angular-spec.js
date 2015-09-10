@@ -106,7 +106,7 @@ describe('opentok-angular', function () {
         session.trigger('streamCreated', {stream: {}});
         session.trigger('streamCreated', {stream: {}});
         session.trigger('streamCreated', {stream: {}});
-        session.trigger('sessionDisconnected', {stream: {}});
+        session.trigger('sessionDisconnected');
         setTimeout(function () {
           expect(OTSession.streams.length).toBe(0);
           done();
@@ -117,7 +117,7 @@ describe('opentok-angular', function () {
         session.trigger('connectionCreated', {connection: {}});
         session.trigger('connectionCreated', {connection: {}});
         session.trigger('connectionCreated', {connection: {}});
-        session.trigger('sessionDisconnected', {stream: {}});
+        session.trigger('sessionDisconnected');
         setTimeout(function () {
           expect(OTSession.connections.length).toBe(0);
           done();
