@@ -113,6 +113,17 @@ describe('opentok-angular', function () {
         }, 10);
       });
 
+      it('empties the connections array on sessionDisconnected', function (done) {
+        session.trigger('connectionCreated', {connection: {}});
+        session.trigger('connectionCreated', {connection: {}});
+        session.trigger('connectionCreated', {connection: {}});
+        session.trigger('sessionDisconnected', {stream: {}});
+        setTimeout(function () {
+          expect(OTSession.connections.length).toBe(0);
+          done();
+        }, 10);
+      });
+
       it('publishes publishers on sessionConnected', function (done) {
         var publisher = {};
         OTSession.publishers.push(publisher);

@@ -42,6 +42,7 @@ angular.module('opentok', [])
             sessionDisconnected: function() {
               $rootScope.$apply(function() {
                 OTSession.streams.splice(0, OTSession.streams.length);
+                OTSession.connections.splice(0, OTSession.connections.length);
               });
             },
             connectionCreated: function(event) {
