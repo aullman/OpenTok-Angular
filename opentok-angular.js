@@ -172,8 +172,8 @@ angular.module('opentok', [])
         link: function(scope, element) {
           var stream = scope.stream,
             props = scope.props() || {};
-          props.width = props.width ? props.width : angular.element(element).width();
-          props.height = props.height ? props.height : angular.element(element).height();
+          props.width = props.width ? props.width : element[0].offsetWidth;
+          props.height = props.height ? props.height : element[0].offsetHeight;
           var oldChildren = angular.element(element).children();
           var subscriber = OTSession.session.subscribe(stream, element[0], props, function(err) {
             if (err) {
