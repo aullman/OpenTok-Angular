@@ -105,10 +105,10 @@ angular.module('opentok', [])
         },
         link: function(scope, element, attrs) {
           var props = scope.props() || {};
-          props.width = props.width ? props.width : angular.element(element).width();
-          props.height = props.height ? props.height : angular.element(element).height();
+          props.width = props.width ? props.width : element[0].offsetWidth;
+          props.height = props.height ? props.height : element[0].offsetHeight;
           var oldChildren = angular.element(element).children();
-          scope.publisher = TB.initPublisher(attrs.apikey || OTSession.session.apiKey,
+          scope.publisher = TB.initPublisher(attrs.apiKey || OTSession.session.apiKey,
             element[0], props, function(err) {
               if (err) {
                 scope.$emit('otPublisherError', err, scope.publisher);
