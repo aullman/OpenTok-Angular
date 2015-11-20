@@ -31,7 +31,9 @@ angular.module('opentok', [])
             },
             streamCreated: function(event) {
               $rootScope.$apply(function() {
-                OTSession.streams.push(event.stream);
+                if ( !_.findWhere(OTSession.streams, {id: event.stream.id})) {
+                  OTSession.streams.push(event.stream);
+                }
               });
             },
             streamDestroyed: function(event) {
