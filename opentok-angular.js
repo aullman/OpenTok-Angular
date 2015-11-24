@@ -113,9 +113,9 @@ angular.module('opentok', [])
               if (err) {
                 scope.$emit('otPublisherError', err, scope.publisher);
               }
+          	// Make transcluding work manually by putting the children back in there
+          	angular.element(element).append(oldChildren);
             });
-          // Make transcluding work manually by putting the children back in there
-          angular.element(element).append(oldChildren);
           scope.publisher.on({
             accessDenied: function() {
               scope.$emit('otAccessDenied');
