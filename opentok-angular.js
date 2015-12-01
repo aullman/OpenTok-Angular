@@ -8,20 +8,20 @@
  *  @License: Released under the MIT license (http://opensource.org/licenses/MIT)
  **/
 
-if (!window.TB) throw new Error('You must include the TB library before the TB_Angular library');
+if (!window.OT) throw new Error('You must include the OT library before the OT_Angular library');
 
 angular.module('opentok', [])
-  .factory('TB', function() {
-    return TB;
+  .factory('OT', function() {
+    return OT;
   })
-  .factory('OTSession', ['TB', '$rootScope',
-    function(TB, $rootScope) {
+  .factory('OTSession', ['OT', '$rootScope',
+    function(OT, $rootScope) {
       var OTSession = {
         streams: [],
         connections: [],
         publishers: [],
         init: function(apiKey, sessionId, token, cb) {
-          this.session = TB.initSession(apiKey, sessionId);
+          this.session = OT.initSession(apiKey, sessionId);
 
           OTSession.session.on({
             sessionConnected: function() {
@@ -63,17 +63,17 @@ angular.module('opentok', [])
           this.trigger('init');
         }
       };
-      TB.$.eventing(OTSession);
+      OT.$.eventing(OTSession);
       return OTSession;
     }
   ])
-  .directive('otLayout', ['$window', '$parse', 'TB', 'OTSession',
-    function($window, $parse, TB, OTSession) {
+  .directive('otLayout', ['$window', '$parse', 'OT', 'OTSession',
+    function($window, $parse, OT, OTSession) {
       return {
         restrict: 'E',
         link: function(scope, element, attrs) {
           var props = $parse(attrs.props)();
-          var container = TB.initLayoutContainer(element[0], props);
+          var container = OT.initLayoutContainer(element[0], props);
           var layout = function() {
             container.layout();
             scope.$emit('otLayoutComplete');
@@ -108,7 +108,7 @@ angular.module('opentok', [])
           props.width = props.width ? props.width : angular.element(element).width();
           props.height = props.height ? props.height : angular.element(element).height();
           var oldChildren = angular.element(element).children();
-          scope.publisher = TB.initPublisher(attrs.apikey || OTSession.session.apiKey,
+          scope.publisher = OT.initPublisher(attrs.apikey || OTSession.session.apiKey,
             element[0], props, function(err) {
               if (err) {
                 scope.$emit('otPublisherError', err, scope.publisher);
