@@ -145,16 +145,17 @@ describe('opentok-angular', function () {
     });
 
     describe('ot-layout', function () {
+      console.log(initLayoutContainer);
       var element, scope, layout, $window;
       beforeEach(inject(function ($rootScope, $compile, _$window_) {
         $window = _$window_;
-        var oldInitLayoutContainer = OT.initLayoutContainer;
-        OT.initLayoutContainer = function () {
+        var oldInitLayoutContainer = initLayoutContainer;
+        initLayoutContainer = function () {
           var container = oldInitLayoutContainer.apply(this, arguments);
           layout = container.layout = jasmine.createSpy('layout').and.callFake(container.layout);
           return container;
         };
-        spyOn(OT, 'initLayoutContainer').and.callThrough();
+        spyOn(window, 'initLayoutContainer').and.callThrough();
         scope = $rootScope.$new();
         element = '<ot-layout props="{animate:true}"></ot-layout>';
         element = $compile(element)(scope);
@@ -165,8 +166,8 @@ describe('opentok-angular', function () {
         scope = null;
       });
 
-      it('calls OT.initLayoutContainer with the right props', function () {
-        expect(OT.initLayoutContainer).toHaveBeenCalledWith(element[0], jasmine.objectContaining({
+      it('calls initLayoutContainer with the right props', function () {
+        expect(initLayoutContainer).toHaveBeenCalledWith(element[0], jasmine.objectContaining({
           animate: true
         }));
       });

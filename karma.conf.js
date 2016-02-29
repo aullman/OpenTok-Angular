@@ -16,10 +16,10 @@ module.exports = function(config) {
     // list of files / patterns to load in the browser
     files: [
       'https://static.opentok.com/webrtc/v2.2/js/opentok.js',
-      'bower_components/jquery/dist/jquery.js',
-      'bower_components/angular/angular.js',
-      'bower_components/angular-mocks/angular-mocks.js',
-      'bower_components/opentok-layout-js/opentok-layout.js',
+      'node_modules/jquery/dist/jquery.js',
+      'node_modules/angular/angular.js',
+      'node_modules/angular-mocks/angular-mocks.js',
+      'node_modules/opentok-layout-js/opentok-layout.js',
       'opentok-angular.js',
       'tests/**/*spec.js'
     ],

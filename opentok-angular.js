@@ -73,7 +73,7 @@ angular.module('opentok', [])
         restrict: 'E',
         link: function(scope, element, attrs) {
           var props = $parse(attrs.props)();
-          var container = OT.initLayoutContainer(element[0], props);
+          var container = initLayoutContainer(element[0], props);
           var layout = function() {
             container.layout();
             scope.$emit('otLayoutComplete');
