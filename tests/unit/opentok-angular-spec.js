@@ -145,7 +145,6 @@ describe('opentok-angular', function () {
     });
 
     describe('ot-layout', function () {
-      console.log(initLayoutContainer);
       var element, scope, layout, $window;
       beforeEach(inject(function ($rootScope, $compile, _$window_) {
         $window = _$window_;
