@@ -22,8 +22,7 @@
     "opentok-layout-js": "~0.3.1"
   },
   "scripts": {
-    "test": "karma start karma.conf.js --single-run --browsers Chrome",
-    "postinstall": "gulp"
+    "test": "karma start karma.conf.js --single-run --browsers Chrome"
   },
   "repository": {
     "type": "git",
