@@ -13,9 +13,19 @@ It only works with the [OpenTok API for WebRTC](http://www.tokbox.com/opentok/we
 
 This Angular Module was originally created to power [opentok-meet](https://meet.tokbox.com/) ([github](https://github.com/aullman/opentok-meet)). It's a pretty good example of how to use it.
 
-## Usage
+## Installing
 
-This component can be installed using [bower](http://bower.io/). Simply run `bower install opentok-angular`. Or you can clone this repo and include the `opentok-angular.min.js` file in your page.
+### npm
+
+`npm install opentok-angular`
+
+### Bower
+
+This component can be installed using [bower](http://bower.io/). Simply run `bower install opentok-angular`.
+
+### manually
+
+clone this repo and include the `opentok-angular.min.js` file in your page.
 
 ## Running the demo
 
@@ -76,7 +86,7 @@ angular.module('MyApp', ['opentok'])
 ### ot-publisher Directive
 
 The publisher directive uses the power of Angular directives to allow you to define an OpenTok publisher directly in your DOM. This publisher creates a standalone publisher using TB.initPublisher and if you pass a reference to a session then session.publish will be called
-when the publisher is ready. Alternatively you can pass a reference to this publisher to the 
+when the publisher is ready. Alternatively you can pass a reference to this publisher to the
 ot-session directive and session.publish(publisher) will be called when the session connects.
 
 #### Dependencies
@@ -128,8 +138,8 @@ angular.module('myModule', ['opentok']);
 ```
 
 ```html
-<ot-subscriber ng-repeat="stream in streams" 
-    stream="stream" 
+<ot-subscriber ng-repeat="stream in streams"
+    stream="stream"
     props="{style: {nameDisplayMode: 'off'}}">
 </ot-subscriber>
 ```
@@ -161,9 +171,9 @@ angular.module('myModule', ['opentok']);
 
 ```html
 <ot-layout props="{animate:true}">
-    <ot-subscriber ng-repeat="stream in streams" 
-        stream="stream" 
-        session="session" 
+    <ot-subscriber ng-repeat="stream in streams"
+        stream="stream"
+        session="session"
         props="{style: {nameDisplayMode: 'off'}}">
     </ot-subscriber>
 </ot-layout>

@@ -10,7 +10,14 @@
 
 if (!window.OT) throw new Error('You must include the OT library before the OT_Angular library');
 
-angular.module('opentok', [])
+var ng;
+if (typeof angular === 'undefined' && typeof require !== 'undefined') {
+  ng = require('angular');
+} else {
+  ng = angular;
+}
+
+ng.module('opentok', [])
   .factory('OT', function() {
     return OT;
   })
@@ -105,9 +112,9 @@ angular.module('opentok', [])
         },
         link: function(scope, element, attrs) {
           var props = scope.props() || {};
-          props.width = props.width ? props.width : angular.element(element).width();
-          props.height = props.height ? props.height : angular.element(element).height();
-          var oldChildren = angular.element(element).children();
+          props.width = props.width ? props.width : ng.element(element).width();
+          props.height = props.height ? props.height : ng.element(element).height();
+          var oldChildren = ng.element(element).children();
           scope.publisher = OT.initPublisher(attrs.apikey || OTSession.session.apiKey,
             element[0], props, function(err) {
               if (err) {
@@ -115,7 +122,7 @@ angular.module('opentok', [])
               }
             });
           // Make transcluding work manually by putting the children back in there
-          angular.element(element).append(oldChildren);
+          ng.element(element).append(oldChildren);
           scope.publisher.on({
             accessDenied: function() {
               scope.$emit('otAccessDenied');
@@ -127,7 +134,7 @@ angular.module('opentok', [])
               scope.$emit('otAccessDialogClosed');
             },
             accessAllowed: function() {
-              angular.element(element).addClass('allowed');
+              ng.element(element).addClass('allowed');
               scope.$emit('otAccessAllowed');
             },
             loaded: function() {
@@ -172,9 +179,9 @@ angular.module('opentok', [])
         link: function(scope, element) {
           var stream = scope.stream,
             props = scope.props() || {};
-          props.width = props.width ? props.width : angular.element(element).width();
-          props.height = props.height ? props.height : angular.element(element).height();
-          var oldChildren = angular.element(element).children();
+          props.width = props.width ? props.width : ng.element(element).width();
+          props.height = props.height ? props.height : ng.element(element).height();
+          var oldChildren = ng.element(element).children();
           var subscriber = OTSession.session.subscribe(stream, element[0], props, function(err) {
             if (err) {
               scope.$emit('otSubscriberError', err, subscriber);
@@ -184,7 +191,7 @@ angular.module('opentok', [])
             scope.$emit('otLayout');
           });
           // Make transcluding work manually by putting the children back in there
-          angular.element(element).append(oldChildren);
+          ng.element(element).append(oldChildren);
           scope.$on('$destroy', function() {
             OTSession.session.unsubscribe(subscriber);
           });

@@ -4,18 +4,18 @@
   "description": "Angular module for OpenTok",
   "main": "opentok-angular.js",
   "dependencies": {
+    "angular": "^1.4.8"
+  },
+  "devDependencies": {
     "gulp": "~3.5.5",
     "gulp-jshint": "~1.5.0",
     "gulp-rename": "~1.1.0",
-    "gulp-uglify": "~0.2.1"
-  },
-  "devDependencies": {
+    "gulp-uglify": "~0.2.1",
     "codeclimate-test-reporter": "0.0.4",
     "karma-chrome-launcher": "^0.1.4",
     "karma-coverage": "^0.2.7",
     "karma-firefox-launcher": "^0.1.3",
     "karma-jasmine": "~0.2.0",
-    "angular": "~1.4.8",
     "angular-mocks": "~1.4.8",
     "jquery": "~2.2.0",
     "karma": "^0.12.22",
