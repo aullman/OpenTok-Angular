@@ -16,6 +16,12 @@ if (typeof angular === 'undefined' && typeof require !== 'undefined') {
 } else {
   ng = angular;
 }
+var initLayoutContainer;
+if (!window.hasOwnProperty('initLayoutContainer') && typeof require !== 'undefined') {
+  initLayoutContainer = require('opentok-layout-js').initLayoutContainer;
+} else {
+  initLayoutContainer = window.initLayoutContainer;
+}
 
 ng.module('opentok', [])
   .factory('OT', function() {
