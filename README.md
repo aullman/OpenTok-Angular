@@ -130,7 +130,7 @@ This directive requires the OpenTok JavaScript WebRTC library to be included in 
 #### Events
 
 * `"otSubscriberError"` - This event is emitted on the scope if there is an error subscribing.
-* `"otSubscriber"` - Emitted on the scope when a subscriber receives a `'loaded'` event.  `streamId` and the `subscriber` object, which is needed for a network testing, are passed as an array [ streamId, subscriber].
+* `"otSubscriber"` - Emitted on the scope when a subscriber receives a `'loaded'` event.  `streamId` and the `subscriber` object, which is needed for network testing, are passed as an array [ streamId, subscriber].
 
 #### Example Usage
 
