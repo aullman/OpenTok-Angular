@@ -195,7 +195,7 @@ ng.module('opentok', [])
           });
           subscriber.on('loaded', function() {
             scope.$emit('otLayout');
-            scope.$emit('otsubscriber', [stream.streamId, subscriber]);
+            scope.$emit('otSubscriber', [stream.streamId, subscriber]);
           });
           // Make transcluding work manually by putting the children back in there
           ng.element(element).append(oldChildren);
