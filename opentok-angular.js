@@ -74,6 +74,11 @@ ng.module('opentok', [])
             if (cb) cb(err, OTSession.session);
           });
           this.trigger('init');
+        },
+        addPublisher: function(publisher) {
+          this.publishers.push(publisher);
+          this.trigger('otPublisherAdded');
+          $rootScope.$apply();
         }
       };
       OT.$.eventing(OTSession);
@@ -169,7 +174,7 @@ ng.module('opentok', [])
               }
             });
           }
-          OTSession.publishers.push(scope.publisher);
+          OTSession.addPublisher(scope.publisher);
         }
       };
     }

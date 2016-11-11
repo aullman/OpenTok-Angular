@@ -133,6 +133,13 @@ describe('opentok-angular', function () {
           done();
         }, 10);
       });
+
+      it('triggers otPublisherAdded when you add a publisher', function() {
+        var publisher = {};
+        OTSession.addPublisher(publisher);
+        expect(OTSession.publishers).toContain(publisher);
+        expect(OTSession.trigger).toHaveBeenCalledWith('otPublisherAdded');
+      });
     });
   });
   describe('directives:', function () {
