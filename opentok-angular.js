@@ -78,7 +78,6 @@ ng.module('opentok', [])
         addPublisher: function(publisher) {
           this.publishers.push(publisher);
           this.trigger('otPublisherAdded');
-          $rootScope.$apply();
         }
       };
       OT.$.eventing(OTSession);
