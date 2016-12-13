@@ -39,7 +39,11 @@ ng.module('opentok', [])
           OTSession.session.on({
             sessionConnected: function() {
               OTSession.publishers.forEach(function(publisher) {
-                OTSession.session.publish(publisher);
+                OTSession.session.publish(publisher, function(err) {
+                  if (err) {
+                    $rootScope.$broadcast('otPublisherError', err, publisher);
+                  }
+                });
               });
             },
             streamCreated: function(event) {

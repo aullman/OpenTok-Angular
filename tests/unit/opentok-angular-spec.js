@@ -129,8 +129,19 @@ describe('opentok-angular', function () {
         OTSession.publishers.push(publisher);
         session.trigger('sessionConnected');
         setTimeout(function () {
-          expect(session.publish).toHaveBeenCalledWith(publisher);
+          expect(session.publish).toHaveBeenCalledWith(publisher, jasmine.any(Function));
           done();
+        }, 10);
+      });
+
+      it('handles publish errors', function(done) {
+        var publisher = {};
+        OTSession.publishers.push(publisher);
+        session.trigger('sessionConnected');
+        $rootScope.$on('otPublisherError', done);
+        setTimeout(function () {
+          var callback = session.publish.calls.mostRecent().args[1];
+          callback('error');
         }, 10);
       });
 
