@@ -1,7 +1,7 @@
 {
   "name": "opentok-angular",
   "main": "opentok-angular.js",
-  "version": "1.2.2",
+  "version": "1.2.3",
   "homepage": "https://github.com/aullman/OpenTok-Angular",
   "authors": [
     "Adam Ullman <adam@tokbox.com>"
