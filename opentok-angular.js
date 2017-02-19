@@ -154,11 +154,11 @@ ng.module('opentok', [])
             loaded: function() {
               scope.$emit('otLayout');
             },
-            streamCreated: function() {
-              scope.$emit('otStreamCreated');
+            streamCreated: function(event) {
+              scope.$emit('otStreamCreated', event);
             },
-            streamDestroyed: function() {
-              scope.$emit('otStreamDestroyed');
+            streamDestroyed: function(event) {
+              scope.$emit('otStreamDestroyed', event);
             }
           });
           scope.$on('$destroy', function() {
