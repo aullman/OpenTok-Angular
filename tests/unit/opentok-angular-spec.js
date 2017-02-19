@@ -283,6 +283,18 @@ describe('opentok-angular', function () {
         publisher.trigger('accessDialogClosed');
       });
 
+      ['streamCreated', 'streamDestroyed'].forEach(function (eventType) {
+        var otEventType = 'ot' + eventType[0].toUpperCase() + eventType.substring(1)
+        it('emits ot' + otEventType + ' on publisher streamCreated and OT event passes through', function (done) {
+          var fakeEvent = {a: 5, b: true, c: 'hi'};
+          scope.$on(otEventType, function(event, passthroughEvent) {
+            if (passthroughEvent === fakeEvent) done();
+            else done.fail();
+          });
+          publisher.trigger(eventType, fakeEvent);
+        });
+      });
+
       it('adds the publisher to the OTSession.publishers', function () {
         expect(OTSession.publishers).toContain(publisher);
       });
