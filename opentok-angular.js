@@ -8,6 +8,13 @@
  *  @License: Released under the MIT license (http://opensource.org/licenses/MIT)
  **/
 
+
+/* In the directive otSubscriber, this library define all parameters obtained throw the html. With exception of the object session.This provoque that during a multisession,
+   when you change to a second call, and returns to the first call. Try to connect to first stream with the second session. The solution is define a variable sesssion in the 
+   directive otSubscriber and assign the value obtained in the scope.*/
+
+
+
 if (!window.OT) throw new Error('You must include the OT library before the OT_Angular library');
 
 var ng;
@@ -38,13 +45,7 @@ ng.module('opentok', [])
 
           OTSession.session.on({
             sessionConnected: function() {
-              OTSession.publishers.forEach(function(publisher) {
-                OTSession.session.publish(publisher, function(err) {
-                  if (err) {
-                    $rootScope.$broadcast('otPublisherError', err, publisher);
-                  }
-                });
-              });
+            OTSession.session.publish(OTSession.publishers[OTSession.publishers.length - 1])
             },
             streamCreated: function(event) {
               $rootScope.$apply(function() {
@@ -78,10 +79,6 @@ ng.module('opentok', [])
             if (cb) cb(err, OTSession.session);
           });
           this.trigger('init');
-        },
-        addPublisher: function(publisher) {
-          this.publishers.push(publisher);
-          this.trigger('otPublisherAdded');
         }
       };
       OT.$.eventing(OTSession);
@@ -154,11 +151,11 @@ ng.module('opentok', [])
             loaded: function() {
               scope.$emit('otLayout');
             },
-            streamCreated: function(event) {
-              scope.$emit('otStreamCreated', event);
+            streamCreated: function() {
+              scope.$emit('otStreamCreated');
             },
-            streamDestroyed: function(event) {
-              scope.$emit('otStreamDestroyed', event);
+            streamDestroyed: function() {
+              scope.$emit('otStreamDestroyed');
             }
           });
           scope.$on('$destroy', function() {
@@ -177,7 +174,7 @@ ng.module('opentok', [])
               }
             });
           }
-          OTSession.addPublisher(scope.publisher);
+          OTSession.publishers.push(scope.publisher);
         }
       };
     }
@@ -188,15 +185,17 @@ ng.module('opentok', [])
         restrict: 'E',
         scope: {
           stream: '=',
+          session: '=',
           props: '&'
         },
         link: function(scope, element) {
           var stream = scope.stream,
-            props = scope.props() || {};
+            props = scope.props() || {},
+            session = scope.session;
           props.width = props.width ? props.width : ng.element(element).width();
           props.height = props.height ? props.height : ng.element(element).height();
           var oldChildren = ng.element(element).children();
-          var subscriber = OTSession.session.subscribe(stream, element[0], props, function(err) {
+          var subscriber = session.subscribe(stream, element[0], props, function(err) {
             if (err) {
               scope.$emit('otSubscriberError', err, subscriber);
             }
