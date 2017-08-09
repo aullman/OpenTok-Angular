@@ -5,7 +5,7 @@
   "main": "opentok-angular.js",
   "dependencies": {
     "angular": "^1.4.8",
-    "opentok-layout-js": "^0.4.1"
+    "opentok-layout-js": "^0.5.1"
   },
   "devDependencies": {
     "gulp": "~3.5.5",
