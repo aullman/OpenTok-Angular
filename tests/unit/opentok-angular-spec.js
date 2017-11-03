@@ -167,14 +167,16 @@ describe('opentok-angular', function () {
       beforeEach(inject(function ($rootScope, $compile, _$window_) {
         $window = _$window_;
         var oldInitLayoutContainer = initLayoutContainer;
+        var layoutSpy = jasmine.createSpy('layout');
         initLayoutContainer = function () {
           var container = oldInitLayoutContainer.apply(this, arguments);
-          layout = container.layout = jasmine.createSpy('layout').and.callFake(container.layout);
+          layout = container.layout = layoutSpy;
           return container;
         };
         spyOn(window, 'initLayoutContainer').and.callThrough();
         scope = $rootScope.$new();
-        element = '<ot-layout props="{animate:true}"></ot-layout>';
+        scope.props = {animate:true};
+        element = '<ot-layout props="props"></ot-layout>';
         element = $compile(element)(scope);
         scope.$digest();
       }));
@@ -210,7 +212,7 @@ describe('opentok-angular', function () {
         session.trigger('streamPropertyChanged', {changedProperty: 'videoDimensions'});
       });
 
-      it ('calls layout if the window resizes', function (done) {
+      it('calls layout if the window resizes', function (done) {
         var numCalls = layout.calls.count();
         var removeHandler = scope.$on('otLayoutComplete', function () {
           removeHandler();
@@ -218,6 +220,17 @@ describe('opentok-angular', function () {
           done();
         });
         $window.dispatchEvent(new Event('resize'));
+      });
+
+      it('lets you update the props', function() {
+        scope.props.fixedRatio = true;
+        scope.props.animate = false;
+        scope.$digest();
+        scope.$emit('otLayout');
+        expect(initLayoutContainer).toHaveBeenCalledWith(element[0], jasmine.objectContaining({
+          animate: false,
+          fixedRatio: true
+        }));
       });
     });
 

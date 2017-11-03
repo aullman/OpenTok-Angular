@@ -92,10 +92,13 @@ ng.module('opentok', [])
     function($window, $parse, OT, OTSession) {
       return {
         restrict: 'E',
+        scope: {
+          props: '&'
+        },
         link: function(scope, element, attrs) {
-          var props = $parse(attrs.props)();
-          var container = initLayoutContainer(element[0], props);
           var layout = function() {
+            var props = scope.props() || {};
+            var container = initLayoutContainer(element[0], props);
             container.layout();
             scope.$emit('otLayoutComplete');
           };
@@ -117,8 +120,8 @@ ng.module('opentok', [])
       };
     }
   ])
-  .directive('otPublisher', ['OTSession',
-    function(OTSession) {
+  .directive('otPublisher', ['OTSession', '$rootScope',
+    function(OTSession, $rootScope) {
       return {
         restrict: 'E',
         scope: {
@@ -152,7 +155,7 @@ ng.module('opentok', [])
               scope.$emit('otAccessAllowed');
             },
             loaded: function() {
-              scope.$emit('otLayout');
+              $rootScope.$broadcast('otLayout');
             },
             streamCreated: function(event) {
               scope.$emit('otStreamCreated', event);
@@ -182,8 +185,8 @@ ng.module('opentok', [])
       };
     }
   ])
-  .directive('otSubscriber', ['OTSession',
-    function(OTSession) {
+  .directive('otSubscriber', ['OTSession', '$rootScope',
+    function(OTSession, $rootScope) {
       return {
         restrict: 'E',
         scope: {
@@ -202,7 +205,7 @@ ng.module('opentok', [])
             }
           });
           subscriber.on('loaded', function() {
-            scope.$emit('otLayout');
+            $rootScope.$broadcast('otLayout');
           });
           // Make transcluding work manually by putting the children back in there
           ng.element(element).append(oldChildren);
