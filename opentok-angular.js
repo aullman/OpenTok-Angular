@@ -162,6 +162,11 @@ ng.module('opentok', [])
             },
             streamDestroyed: function(event) {
               scope.$emit('otStreamDestroyed', event);
+            },
+            videoElementCreated: function(event) {
+              event.element.addEventListener('resize', function() {
+                $rootScope.$broadcast('otLayout');
+              });
             }
           });
           scope.$on('$destroy', function() {
@@ -204,8 +209,15 @@ ng.module('opentok', [])
               scope.$emit('otSubscriberError', err, subscriber);
             }
           });
-          subscriber.on('loaded', function() {
-            $rootScope.$broadcast('otLayout');
+          subscriber.on({
+            loaded: function() {
+              $rootScope.$broadcast('otLayout');
+            },
+            videoElementCreated: function(event) {
+              event.element.addEventListener('resize', function() {
+                $rootScope.$broadcast('otLayout');
+              });
+            }
           });
           // Make transcluding work manually by putting the children back in there
           ng.element(element).append(oldChildren);

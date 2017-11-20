@@ -268,6 +268,15 @@ describe('opentok-angular', function () {
         publisher.trigger('loaded');
       });
 
+      it('emits otLayout when the publisher video element resizes', function (done) {
+        scope.$on('otLayout', done);
+        var video = document.createElement('video');
+        publisher.trigger('videoElementCreated', {element: video});
+        setTimeout(function() {
+          video.dispatchEvent(new Event('resize'));
+        }, 10);
+      });
+
       it('adds an allowed class', function (done) {
         publisher.trigger('accessAllowed');
         setTimeout(function () {
@@ -376,6 +385,15 @@ describe('opentok-angular', function () {
       it('emits an otLayout when loaded', function (done) {
         scope.$on('otLayout', done);
         subscriber.trigger('loaded');
+      });
+
+      it('emits otLayout when the video element resizes', function (done) {
+        scope.$on('otLayout', done);
+        var video = document.createElement('video');
+        subscriber.trigger('videoElementCreated', {element: video});
+        setTimeout(function() {
+          video.dispatchEvent(new Event('resize'));
+        }, 10);
       });
 
       it('emits an otSubscriberError if there is an error on subscribe', function (done) {
