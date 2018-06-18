@@ -15,11 +15,23 @@
                  right: 0;
                  bottom: 0;
              }
+             ot-layout > * {
+                transition-property: all;
+                transition-duration: 0.5s;
+            }
+            ot-layout > * {
+                width: 0;
+                height: 0;
+                opacity: 0;
+            }
+            ot-layout > *.ot-layout {
+                opacity: 1;
+            }
          </style>
     </head>
     <body>
         <div ng-controller="MyCtrl">
-            <ot-layout props="{animate:true}">
+            <ot-layout>
                 <ot-subscriber ng-repeat="stream in streams" 
                     stream="stream" 
                     props="{style: {nameDisplayMode: 'off'}}">
